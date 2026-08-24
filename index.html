@@ -3,2339 +3,1489 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>QuizZone</title>
+<title>QuizZone 🎮</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #101020, #252550);
-    color: white;
-    transition: 0.4s;
-}
-
-body.neon {
-    background: linear-gradient(135deg, #05001c, #280052);
-}
-
-body.red {
-    background: linear-gradient(135deg, #200000, #650d0d);
-}
-
-body.football {
-    background: linear-gradient(135deg, #001b0b, #063d1b);
-}
-
-header {
-    text-align: center;
-    padding: 30px 15px;
-    background: rgba(0,0,0,0.3);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 45px;
-}
-
-header p {
-    color: #cccccc;
-}
-
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 25px 20px;
-}
-
-button {
-    border: none;
-    border-radius: 18px;
-    padding: 18px;
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover:not(:disabled) {
-    transform: scale(1.03);
-}
-
-button:disabled {
-    cursor: default;
-}
-
-#musicButton {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    padding: 12px 16px;
-    background: #5555cc;
-    font-size: 14px;
-    z-index: 50;
-}
-
-#volumeBox {
-    position: fixed;
-    top: 65px;
-    right: 15px;
-    background: #252542;
-    padding: 12px;
-    border-radius: 15px;
-    z-index: 50;
-    display: none;
-}
-
-#volume {
-    width: 120px;
-}
-
-.profile {
-    background: rgba(37,37,66,0.95);
-    border-radius: 20px;
-    padding: 18px;
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-.profile-name {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.profile-info {
-    margin-top: 8px;
-    color: #ffd700;
-}
-
-.stats {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-}
-
-.stat {
-    background: #393960;
-    padding: 10px 15px;
-    border-radius: 12px;
-}
-
-h2 {
-    text-align: center;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-.category {
-    background: #34345c;
-}
+*{box-sizing:border-box}
 
-.category:hover {
-    background: #4c4c80;
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    color:white;
+    background:linear-gradient(135deg,#101020,#252550);
+    transition:.4s;
 }
 
-.levels {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 550px;
-    margin: auto;
-}
-
-.levels button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.levels span {
-    margin-top: 8px;
-    font-size: 15px;
-}
-
-.easy {
-    background: #219653;
-}
-
-.medium {
-    background: #d68116;
-}
+body.neon{background:linear-gradient(135deg,#05001a,#001f35)}
+body.red{background:linear-gradient(135deg,#250000,#520d0d)}
+body.football{background:linear-gradient(135deg,#001d10,#064d2b)}
+body.space{background:linear-gradient(135deg,#020313,#15154c)}
 
-.hard {
-    background: #c53b4a;
+header{
+    text-align:center;
+    padding:25px 15px;
+    background:rgba(0,0,0,.3);
 }
 
-.back {
-    background: #555;
-    margin-top: 25px;
+header h1{
+    margin:0;
+    font-size:44px;
 }
 
-.menuButton {
-    width: 100%;
-    margin-top: 15px;
-    background: #5555cc;
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:25px 20px;
 }
 
-#levelPage,
-#quizBox,
-#result,
-#rankingPage,
-#shopPage,
-#themesPage {
-    display: none;
+.topbar{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
 }
 
-.quiz-card {
-    background: #252542;
-    border-radius: 20px;
-    padding: 30px;
-    animation: appear 0.4s ease;
+.topbar button{
+    padding:12px 16px;
+    border-radius:15px;
+    border:0;
+    color:white;
+    background:#35355f;
+    cursor:pointer;
 }
 
-.progress {
-    color: #cccccc;
-    margin-bottom: 15px;
+button{
+    border:0;
+    border-radius:18px;
+    padding:18px;
+    font-size:17px;
+    color:white;
+    cursor:pointer;
+    transition:.2s;
 }
 
-.question {
-    font-size: 24px;
-    margin-bottom: 20px;
+button:hover{
+    transform:scale(1.03);
 }
 
-.timer {
-    font-size: 19px;
-    margin-bottom: 8px;
-    color: #ffd700;
+.card{
+    background:rgba(30,30,60,.9);
+    border-radius:22px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.timerBar {
-    width: 100%;
-    height: 10px;
-    background: #444;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 22px;
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
 }
 
-.timerFill {
-    height: 100%;
-    width: 100%;
-    background: #39d353;
-    transition: width 1s linear;
+.category{
+    background:#363663;
+    min-height:90px;
 }
 
-.answers {
-    display: grid;
-    gap: 12px;
+.levels{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    max-width:600px;
+    margin:auto;
 }
 
-.answer {
-    background: #393960;
-    text-align: left;
-}
+.easy{background:#219653}
+.medium{background:#d68116}
+.hard{background:#c53b4a}
+.blue{background:#5555cc}
+.back{background:#555}
 
-.answer:hover:not(:disabled) {
-    background: #51518a;
-}
+.hidden{display:none!important}
 
-.correct {
-    background: #219653 !important;
-    animation: correctAnimation 0.5s;
+.answer{
+    width:100%;
+    background:#3d3d68;
+    text-align:left;
+    margin-bottom:10px;
 }
 
-.wrong {
-    background: #c53b4a !important;
-    animation: wrongAnimation 0.5s;
+.correct{
+    background:#219653!important;
+    animation:correct .5s;
 }
 
-.next {
-    display: none;
-    background: #5555cc;
-    margin-top: 25px;
+.wrong{
+    background:#c53b4a!important;
+    animation:wrong .5s;
 }
 
-.result {
-    text-align: center;
-    background: #252542;
-    border-radius: 20px;
-    padding: 30px;
-    animation: resultAnimation 0.7s;
+@keyframes correct{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.08)}
+    100%{transform:scale(1)}
 }
 
-.scoreBig {
-    font-size: 45px;
-    color: #ffd700;
-    font-weight: bold;
+@keyframes wrong{
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-10px)}
+    75%{transform:translateX(10px)}
 }
 
-.streak {
-    text-align: center;
-    margin: 15px 0;
-    font-size: 20px;
-    color: #ff8c00;
+.fade{
+    animation:fade .35s;
 }
 
-.ranking {
-    background: #252542;
-    padding: 25px;
-    border-radius: 20px;
+@keyframes fade{
+    from{opacity:0;transform:translateY(15px)}
+    to{opacity:1;transform:translateY(0)}
 }
 
-.playerRank {
-    display: flex;
-    justify-content: space-between;
-    background: #393960;
-    padding: 16px;
-    border-radius: 12px;
-    margin: 8px 0;
+#musicPanel{
+    position:fixed;
+    right:15px;
+    top:15px;
+    z-index:20;
+    background:#242442;
+    padding:15px;
+    border-radius:18px;
+    box-shadow:0 10px 30px #0008;
 }
 
-.playerRank.me {
-    border: 2px solid #ffd700;
+#musicButton{
+    background:#5555cc;
+    padding:12px 16px;
 }
 
-.shopItem {
-    background: #34345c;
-    border-radius: 18px;
-    padding: 20px;
-    margin: 12px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+#volume{
+    width:120px;
+    vertical-align:middle;
 }
 
-.shopItem button {
-    background: #5555cc;
-    padding: 12px;
+.timer{
+    font-size:20px;
+    margin:15px 0;
 }
 
-.themeButton {
-    width: 100%;
-    margin: 8px 0;
+.timerBar{
+    height:10px;
+    background:#111;
+    border-radius:10px;
+    overflow:hidden;
 }
 
-.popup {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.88);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+#timerProgress{
+    height:100%;
+    width:100%;
+    background:#42d392;
+    transition:width 1s linear;
 }
 
-.popup-content {
-    background: #252542;
-    padding: 35px;
-    border-radius: 25px;
-    text-align: center;
-    width: 90%;
-    max-width: 430px;
-    animation: appear 0.5s ease;
+.score{
+    font-size:22px;
+    text-align:center;
 }
 
-.popup-content input {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    margin: 15px 0;
-    font-size: 18px;
+.streak{
+    text-align:center;
+    font-size:20px;
+    color:#ffd43b;
+    min-height:28px;
 }
 
-.popup-content button {
-    width: 100%;
-    background: #5555cc;
+.profileInput{
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:0;
+    font-size:18px;
+    margin:10px 0;
 }
 
-.hidden {
-    display: none !important;
+.rank{
+    display:flex;
+    justify-content:space-between;
+    padding:15px;
+    margin:8px 0;
+    background:#35355d;
+    border-radius:12px;
 }
 
-.fade {
-    animation: appear 0.4s ease;
+.modal{
+    position:fixed;
+    inset:0;
+    background:#0009;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:30;
 }
 
-@keyframes appear {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.modalBox{
+    width:min(500px,90%);
+    background:#252542;
+    border-radius:25px;
+    padding:30px;
+    text-align:center;
 }
 
-@keyframes correctAnimation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1); }
+.shopItem{
+    background:#34345c;
+    padding:18px;
+    border-radius:16px;
+    margin:10px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-@keyframes wrongAnimation {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    50% { transform: translateX(8px); }
-    75% { transform: translateX(-8px); }
-    100% { transform: translateX(0); }
+.themeBtn{
+    margin:5px;
 }
 
-@keyframes resultAnimation {
-    from {
-        transform: scale(0.7);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+#confetti{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:50;
 }
-
-@media (max-width: 600px) {
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
-
-    header h1 {
-        font-size: 35px;
-    }
-
-    .question {
-        font-size: 20px;
-    }
-
-    #musicButton {
-        position: static;
-        margin: 10px;
-    }
 
-    #volumeBox {
-        position: static;
-        margin: 10px auto;
-        width: fit-content;
-    }
+@media(max-width:650px){
+    .grid{grid-template-columns:1fr}
+    header h1{font-size:35px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= MUSIQUE ================= -->
+<div id="confetti"></div>
 
-<button id="musicButton" onclick="toggleMusic()">
-🔇 MUSIQUE DÉSACTIVÉE
-</button>
-
-<div id="volumeBox">
+<div id="musicPanel">
+    <button id="musicButton" onclick="toggleMusic()">🔇 MUSIQUE DÉSACTIVÉE</button>
+    <br><br>
     🔊 Volume
-    <input
-        id="volume"
-        type="range"
-        min="0"
-        max="100"
-        value="35"
-        oninput="changeVolume()"
-    >
-</div>
-
-<!-- ================= POPUP NOM ================= -->
-
-<div id="namePopup" class="popup">
-
-    <div class="popup-content">
-
-        <h2>👋 Bienvenue sur QuizZone !</h2>
-
-        <p>Comment tu t'appelles ?</p>
-
-        <input
-            id="playerNameInput"
-            type="text"
-            placeholder="Ton prénom..."
-            maxlength="15"
-        >
-
-        <button onclick="savePlayerName()">
-            🚀 Commencer
-        </button>
-
-    </div>
-
+    <input id="volume" type="range" min="0" max="100" value="35"
+           onchange="changeVolume(this.value)">
 </div>
 
 <header>
-
     <h1>🧠 QuizZone</h1>
-
-    <p>Teste tes connaissances !</p>
-
+    <p>Teste tes connaissances ! 🎮</p>
 </header>
 
 <div class="container">
 
-<!-- ================= PROFIL ================= -->
-
-<div class="profile">
-
-    <div class="profile-name">
-        👤 <span id="playerName">Tom</span>
-    </div>
-
-    <div class="profile-info">
-        🏆 <span id="playerPoints">0</span> points
-        &nbsp; • &nbsp;
-        🪙 <span id="playerCoins">0</span> pièces
-    </div>
-
-    <div class="stats">
-
-        <div class="stat">
-            🔥 Série :
-            <span id="bestStreak">0</span>
-        </div>
-
-        <div class="stat">
-            🎮 Quiz gagnés :
-            <span id="gamesWon">0</span>
-        </div>
-
-    </div>
-
+<div class="topbar">
+    <button onclick="showProfile()">👤 Profil</button>
+    <button onclick="showRanking()">🏆 Classement</button>
+    <button onclick="showShop()">🪙 Boutique</button>
+    <button onclick="showThemes()">🎨 Thèmes</button>
 </div>
 
-<!-- ================= ACCUEIL ================= -->
-
-<div id="home">
-
+<!-- ACCUEIL -->
+<div id="home" class="card fade">
     <h2>Choisis une catégorie 👇</h2>
 
     <div class="grid">
-
-        <button class="category"
-            onclick="chooseCategory('football')">
-            ⚽ Football
-        </button>
-
-        <button class="category"
-            onclick="chooseCategory('gaming')">
-            🎮 Jeux vidéo
-        </button>
-
-        <button class="category"
-            onclick="chooseCategory('culture')">
-            🌍 Culture générale
-        </button>
-
-        <button class="category"
-            onclick="chooseCategory('films')">
-            🎬 Films & séries
-        </button>
-
+        <button class="category" onclick="chooseCategory('football')">⚽ Football</button>
+        <button class="category" onclick="chooseCategory('gaming')">🎮 Gaming</button>
+        <button class="category" onclick="chooseCategory('culture')">🌍 Culture générale</button>
+        <button class="category" onclick="chooseCategory('films')">🎬 Films & séries</button>
+        <button class="category" onclick="chooseCategory('auto')">🏎️ Sport automobile</button>
+        <button class="category" onclick="chooseCategory('basket')">🏀 Basketball</button>
+        <button class="category" onclick="chooseCategory('science')">🧪 Sciences</button>
+        <button class="category" onclick="chooseCategory('space')">🪐 Espace</button>
+        <button class="category" onclick="chooseCategory('music')">🎵 Musique</button>
+        <button class="category" onclick="chooseCategory('animals')">🦖 Animaux</button>
     </div>
 
-    <button class="menuButton"
-        onclick="showRanking()">
-        🏆 Classement
-    </button>
-
-    <button class="menuButton"
-        onclick="showShop()">
-        🪙 Boutique
-    </button>
-
-    <button class="menuButton"
-        onclick="showThemes()">
-        🎨 Thèmes
-    </button>
-
+    <div class="score">
+        🪙 <span id="coinsHome">0</span> pièces
+    </div>
 </div>
 
-<!-- ================= NIVEAUX ================= -->
-
-<div id="levelPage">
-
+<!-- NIVEAUX -->
+<div id="levelPage" class="card hidden fade">
     <h2>Choisis ton niveau 🔥</h2>
 
     <div class="levels">
-
-        <button class="easy"
-            onclick="startQuiz('facile')">
-
+        <button class="easy" onclick="startQuiz('facile')">
             🟢 Niveau 1 — Facile
-
-            <span>5 questions</span>
-
+            <small>5 questions</small>
         </button>
 
-        <button class="medium"
-            onclick="startQuiz('moyen')">
-
+        <button class="medium" onclick="startQuiz('moyen')">
             🟠 Niveau 2 — Moyen
-
-            <span>10 questions</span>
-
+            <small>10 questions</small>
         </button>
 
-        <button class="hard"
-            onclick="startQuiz('difficile')">
-
+        <button class="hard" onclick="startQuiz('difficile')">
             🔴 Niveau 3 — Difficile
-
-            <span>15 questions</span>
-
+            <small>15 questions</small>
         </button>
-
     </div>
 
-    <button class="back"
-        onclick="backHome()">
-
-        ⬅ Retour
-
-    </button>
-
+    <br>
+    <button class="back" onclick="goHome()">⬅ Retour</button>
 </div>
 
-<!-- ================= QUIZ ================= -->
+<!-- QUIZ -->
+<div id="quizBox" class="card hidden fade">
 
-<div id="quizBox">
+    <div class="score">
+        ⭐ <span id="gameScore">0</span> pts
+        &nbsp;&nbsp;
+        🔥 Série : <span id="streak">0</span>
+    </div>
 
-    <div class="quiz-card">
+    <div id="progress"></div>
 
-        <div class="progress"
-            id="progress">
-        </div>
-
-        <div class="timer"
-            id="timer">
-            ⏱️ 15 secondes
-        </div>
-
+    <div class="timer">
+        ⏱️ <span id="time">15</span> secondes
         <div class="timerBar">
-
-            <div
-                id="timerFill"
-                class="timerFill">
-            </div>
-
+            <div id="timerProgress"></div>
         </div>
-
-        <div class="question"
-            id="question">
-        </div>
-
-        <div class="answers"
-            id="answers">
-        </div>
-
-        <div class="streak">
-            🔥 Série :
-            <span id="currentStreak">0</span>
-        </div>
-
-        <button
-            class="next"
-            id="nextBtn"
-            onclick="nextQuestion()">
-
-            Question suivante ➡️
-
-        </button>
-
     </div>
 
+    <h2 id="question"></h2>
+
+    <div id="answers"></div>
+
+    <div id="feedback" class="streak"></div>
+
+    <button id="nextBtn" class="blue hidden" onclick="nextQuestion()">
+        Question suivante ➡️
+    </button>
 </div>
 
-<!-- ================= RESULTAT ================= -->
-
-<div id="result" class="result">
-
+<!-- RESULTAT -->
+<div id="result" class="card hidden fade">
     <h2>🏆 Quiz terminé !</h2>
-
-    <div class="scoreBig"
-        id="finalScore">
-    </div>
 
     <p id="scoreText"></p>
 
-    <p id="rewardText"></p>
-
-    <button
-        class="easy"
-        onclick="restartQuiz()">
-
-        🔄 Rejouer
-
-    </button>
-
-    <button
-        class="back"
-        onclick="goHome()">
-
-        🏠 Accueil
-
-    </button>
+    <button class="easy" onclick="restartQuiz()">🔄 Rejouer</button>
+    <button class="back" onclick="goHome()">🏠 Accueil</button>
+</div>
 
 </div>
 
-<!-- ================= CLASSEMENT ================= -->
-
-<div id="rankingPage"
-     class="ranking">
-
-    <h2>🏆 CLASSEMENT</h2>
-
-    <div id="rankingList"></div>
-
-    <button class="back"
-        onclick="hideAll()">
-
-        ⬅ Retour
-
-    </button>
-
-</div>
-
-<!-- ================= BOUTIQUE ================= -->
-
-<div id="shopPage">
-
-    <div class="ranking">
-
-        <h2>🪙 Boutique</h2>
-
-        <p style="text-align:center">
-            Tu as
-            <strong id="shopCoins">0</strong>
-            🪙
-        </p>
-
-        <div class="shopItem">
-
-            <div>
-                🎨 Thème Néon
-            </div>
-
-            <button onclick="buyTheme('neon', 100)">
-                100 🪙
-            </button>
-
-        </div>
-
-        <div class="shopItem">
-
-            <div>
-                🔥 Thème Rouge
-            </div>
-
-            <button onclick="buyTheme('red', 150)">
-                150 🪙
-            </button>
-
-        </div>
-
-        <div class="shopItem">
-
-            <div>
-                ⚽ Thème Football
-            </div>
-
-            <button onclick="buyTheme('football', 200)">
-                200 🪙
-            </button>
-
-        </div>
-
-        <button class="back"
-            onclick="hideAll()">
-
-            ⬅ Retour
-
-        </button>
-
-    </div>
-
-</div>
-
-<!-- ================= THEMES ================= -->
-
-<div id="themesPage">
-
-    <div class="ranking">
-
-        <h2>🎨 Choisir un thème</h2>
-
-        <button class="themeButton"
-            onclick="setTheme('default')">
-
-            🌌 Gaming
-
-        </button>
-
-        <button class="themeButton"
-            onclick="setTheme('neon')">
-
-            💜 Néon
-
-        </button>
-
-        <button class="themeButton"
-            onclick="setTheme('red')">
-
-            🔥 Rouge
-
-        </button>
-
-        <button class="themeButton"
-            onclick="setTheme('football')">
-
-            ⚽ Football
-
-        </button>
-
-        <button class="back"
-            onclick="hideAll()">
-
-            ⬅ Retour
-
-        </button>
-
-    </div>
-
-</div>
-
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+    <div class="modalBox" id="modalContent"></div>
 </div>
 
 <script>
 
 /* =====================================================
-   PROFIL
-===================================================== */
-
-let playerName =
-    localStorage.getItem("quizzone_name");
-
-let playerPoints =
-    Number(localStorage.getItem("quizzone_points") || 0);
-
-let playerCoins =
-    Number(localStorage.getItem("quizzone_coins") || 0);
-
-let gamesWon =
-    Number(localStorage.getItem("quizzone_gamesWon") || 0);
-
-let bestStreak =
-    Number(localStorage.getItem("quizzone_bestStreak") || 0);
-
-let players =
-    JSON.parse(
-        localStorage.getItem("quizzone_players") || "[]"
-    );
-
-let unlockedThemes =
-    JSON.parse(
-        localStorage.getItem("quizzone_themes") ||
-        '["default"]'
-    );
-
-
-window.addEventListener("load", function() {
-
-    if (!playerName) {
-
-        document.getElementById("namePopup")
-            .style.display = "flex";
-
-    } else {
-
-        document.getElementById("namePopup")
-            .style.display = "none";
-
-        updateProfile();
-
-    }
-
-    updateProfile();
-
-});
-
-
-function savePlayerName() {
-
-    const input =
-        document.getElementById("playerNameInput");
-
-    const name =
-        input.value.trim();
-
-    if (!name) {
-
-        alert("Écris ton prénom !");
-
-        return;
-
-    }
-
-    playerName = name;
-
-    localStorage.setItem(
-        "quizzone_name",
-        playerName
-    );
-
-    addPlayer();
-
-    document.getElementById("namePopup")
-        .style.display = "none";
-
-    updateProfile();
-
-}
-
-
-function updateProfile() {
-
-    document.getElementById("playerName")
-        .innerText =
-        playerName || "Tom";
-
-    document.getElementById("playerPoints")
-        .innerText =
-        playerPoints;
-
-    document.getElementById("playerCoins")
-        .innerText =
-        playerCoins;
-
-    document.getElementById("gamesWon")
-        .innerText =
-        gamesWon;
-
-    document.getElementById("bestStreak")
-        .innerText =
-        bestStreak;
-
-    document.getElementById("shopCoins")
-        .innerText =
-        playerCoins;
-
-}
-
-
-function saveData() {
-
-    localStorage.setItem(
-        "quizzone_points",
-        playerPoints
-    );
-
-    localStorage.setItem(
-        "quizzone_coins",
-        playerCoins
-    );
-
-    localStorage.setItem(
-        "quizzone_gamesWon",
-        gamesWon
-    );
-
-    localStorage.setItem(
-        "quizzone_bestStreak",
-        bestStreak
-    );
-
-    localStorage.setItem(
-        "quizzone_players",
-        JSON.stringify(players)
-    );
-
-    localStorage.setItem(
-        "quizzone_themes",
-        JSON.stringify(unlockedThemes)
-    );
-
-}
-
-
-/* =====================================================
-   CLASSEMENT
-===================================================== */
-
-function addPlayer() {
-
-    let player =
-        players.find(
-            p => p.name === playerName
-        );
-
-    if (!player) {
-
-        players.push({
-            name: playerName,
-            points: playerPoints
-        });
-
-    } else {
-
-        player.points =
-            playerPoints;
-
-    }
-
-    saveData();
-
-}
-
-
-function updateRanking() {
-
-    let player =
-        players.find(
-            p => p.name === playerName
-        );
-
-    if (!player) {
-
-        players.push({
-            name: playerName,
-            points: playerPoints
-        });
-
-    } else {
-
-        player.points =
-            playerPoints;
-
-    }
-
-    saveData();
-
-}
-
-
-function showRanking() {
-
-    hideAll();
-
-    document.getElementById("rankingPage")
-        .style.display = "block";
-
-    const list =
-        document.getElementById("rankingList");
-
-    list.innerHTML = "";
-
-    updateRanking();
-
-    const sorted =
-        [...players].sort(
-            (a,b) => b.points - a.points
-        );
-
-    sorted.forEach(function(player, index) {
-
-        const div =
-            document.createElement("div");
-
-        div.className = "playerRank";
-
-        if (player.name === playerName) {
-            div.classList.add("me");
-        }
-
-        let medal;
-
-        if (index === 0)
-            medal = "🥇";
-        else if (index === 1)
-            medal = "🥈";
-        else if (index === 2)
-            medal = "🥉";
-        else
-            medal = "🏅";
-
-        div.innerHTML = `
-            <span>
-                ${medal} ${player.name}
-            </span>
-
-            <strong>
-                ${player.points} pts
-            </strong>
-        `;
-
-        list.appendChild(div);
-
-    });
-
-}
-
-
-/* =====================================================
-   MUSIQUE
-===================================================== */
-
-let audioContext = null;
-let musicPlaying =
-    localStorage.getItem("quizzone_music") === "true";
-
-let masterGain = null;
-let musicTimer = null;
-
-let volume =
-    Number(
-        localStorage.getItem(
-            "quizzone_volume"
-        ) || 35
-    );
-
-
-function setupAudio() {
-
-    if (!audioContext) {
-
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
-
-        masterGain =
-            audioContext.createGain();
-
-        masterGain.gain.value =
-            volume / 100;
-
-        masterGain.connect(
-            audioContext.destination
-        );
-
-    }
-
-}
-
-
-function toggleMusic() {
-
-    if (!musicPlaying) {
-
-        musicPlaying = true;
-
-        localStorage.setItem(
-            "quizzone_music",
-            "true"
-        );
-
-        startMusic();
-
-    } else {
-
-        musicPlaying = false;
-
-        localStorage.setItem(
-            "quizzone_music",
-            "false"
-        );
-
-        stopMusic();
-
-    }
-
-    updateMusicButton();
-
-}
-
-
-function updateMusicButton() {
-
-    const button =
-        document.getElementById("musicButton");
-
-    if (musicPlaying) {
-
-        button.innerText =
-            "🔊 MUSIQUE ACTIVÉE";
-
-        button.style.background =
-            "#219653";
-
-    } else {
-
-        button.innerText =
-            "🔇 MUSIQUE DÉSACTIVÉE";
-
-        button.style.background =
-            "#c53b4a";
-
-    }
-
-}
-
-
-function changeVolume() {
-
-    volume =
-        Number(
-            document.getElementById("volume").value
-        );
-
-    localStorage.setItem(
-        "quizzone_volume",
-        volume
-    );
-
-    if (masterGain) {
-
-        masterGain.gain.value =
-            volume / 100;
-
-    }
-
-}
-
-
-function startMusic() {
-
-    setupAudio();
-
-    if (audioContext.state === "suspended") {
-        audioContext.resume();
-    }
-
-    if (musicTimer) return;
-
-    const notes = [
-        261.63,
-        329.63,
-        392.00,
-        493.88,
-        392.00,
-        329.63,
-        293.66,
-        440.00
-    ];
-
-    let index = 0;
-
-    function playNote() {
-
-        if (!musicPlaying) return;
-
-        const oscillator =
-            audioContext.createOscillator();
-
-        const gain =
-            audioContext.createGain();
-
-        oscillator.type = "triangle";
-
-        oscillator.frequency.value =
-            notes[index];
-
-        gain.gain.setValueAtTime(
-            0.001,
-            audioContext.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.25,
-            audioContext.currentTime + 0.15
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            audioContext.currentTime + 1.2
-        );
-
-        oscillator.connect(gain);
-        gain.connect(masterGain);
-
-        oscillator.start();
-
-        oscillator.stop(
-            audioContext.currentTime + 1.2
-        );
-
-        index++;
-
-        if (index >= notes.length) {
-            index = 0;
-        }
-
-    }
-
-    playNote();
-
-    musicTimer =
-        setInterval(
-            playNote,
-            1200
-        );
-
-}
-
-
-function stopMusic() {
-
-    if (musicTimer) {
-
-        clearInterval(musicTimer);
-
-        musicTimer = null;
-
-    }
-
-}
-
-
-document.getElementById("volume").value =
-    volume;
-
-updateMusicButton();
-
-
-/* =====================================================
-   PETITS SONS
-===================================================== */
-
-function sound(frequency, duration) {
-
-    if (!musicPlaying) return;
-
-    setupAudio();
-
-    const osc =
-        audioContext.createOscillator();
-
-    const gain =
-        audioContext.createGain();
-
-    osc.frequency.value =
-        frequency;
-
-    gain.gain.value = 0.15;
-
-    osc.connect(gain);
-    gain.connect(masterGain);
-
-    osc.start();
-
-    osc.stop(
-        audioContext.currentTime +
-        duration
-    );
-
-}
-
-
-/* =====================================================
-   QUESTIONS
+   DONNÉES
 ===================================================== */
 
 const quizzes = {
 
-football: {
-
-facile: [
-
-["Combien de joueurs y a-t-il dans une équipe sur le terrain ?", ["9","10","11","12"], "11"],
-["Quelle couleur de carton signifie une expulsion ?", ["Jaune","Rouge","Bleu","Vert"], "Rouge"],
-["Qui est surnommé CR7 ?", ["Messi","Cristiano Ronaldo","Neymar","Mbappé"], "Cristiano Ronaldo"],
-["Combien de mi-temps y a-t-il ?", ["1","2","3","4"], "2"],
-["Quel pays représente l'équipe des Bleus ?", ["France","Italie","Espagne","Portugal"], "France"],
-["Combien de buts faut-il pour un triplé ?", ["2","3","4","5"], "3"],
-["Quel club est appelé PSG ?", ["Paris Saint-Germain","Real Madrid","Barcelone","Juventus"], "Paris Saint-Germain"],
-["Qui protège le but ?", ["Gardien","Arbitre","Coach","Supporter"], "Gardien"]
-
+football:{
+facile:[
+["Combien de joueurs y a-t-il dans une équipe sur le terrain ?",["9","10","11","12"],"11"],
+["Quelle couleur de carton signifie une expulsion ?",["Jaune","Rouge","Bleu","Vert"],"Rouge"],
+["Qui est surnommé CR7 ?",["Messi","Cristiano Ronaldo","Neymar","Mbappé"],"Cristiano Ronaldo"],
+["Combien de mi-temps y a-t-il ?",["1","2","3","4"],"2"],
+["Quel pays représente l'équipe des Bleus ?",["France","Italie","Espagne","Portugal"],"France"]
 ],
-
-moyen: [
-
-["Combien de minutes dure normalement un match ?", ["60","80","90","120"], "90"],
-["Dans quel pays joue la Juventus ?", ["France","Italie","Espagne","Allemagne"], "Italie"],
-["Quel club joue au Santiago Bernabéu ?", ["Real Madrid","PSG","Barcelone","Milan"], "Real Madrid"],
-["Quelle compétition réunit les meilleurs clubs européens ?", ["Ligue des champions","Euro","Coupe du Monde","Copa América"], "Ligue des champions"],
-["Quel joueur a joué au Barça puis au PSG ?", ["Lionel Messi","Haaland","Kane","Bellingham"], "Lionel Messi"],
-["Quel club joue à Anfield ?", ["Liverpool","Chelsea","Arsenal","Tottenham"], "Liverpool"],
-["Combien de points rapporte une victoire ?", ["1","2","3","5"], "3"],
-["Quel pays a gagné la Coupe du Monde 2014 ?", ["Allemagne","Brésil","France","Argentine"], "Allemagne"],
-["Quel pays a gagné la Coupe du Monde 2010 ?", ["Espagne","Pays-Bas","Brésil","Allemagne"], "Espagne"],
-["Qui a remporté le Ballon d'Or 2022 ?", ["Karim Benzema","Messi","Mané","Lewandowski"], "Karim Benzema"],
-["Dans quel championnat joue le Bayern Munich ?", ["Bundesliga","Premier League","Liga","Serie A"], "Bundesliga"],
-["Quel club est surnommé les Citizens ?", ["Manchester City","Liverpool","Chelsea","Manchester United"], "Manchester City"]
-
+moyen:[
+["Combien de minutes dure normalement un match ?",["60","80","90","120"],"90"],
+["Dans quel pays joue la Juventus ?",["France","Italie","Espagne","Allemagne"],"Italie"],
+["Quel club joue au Santiago Bernabéu ?",["Real Madrid","PSG","Barcelone","Milan"],"Real Madrid"],
+["Quelle compétition réunit les meilleurs clubs européens ?",["Ligue des champions","Euro","Coupe du Monde","Copa América"],"Ligue des champions"],
+["Quel joueur a joué au Barça puis au PSG ?",["Lionel Messi","Haaland","Kane","Bellingham"],"Lionel Messi"],
+["Quel club joue à Anfield ?",["Liverpool","Chelsea","Arsenal","Tottenham"],"Liverpool"],
+["Combien de points rapporte une victoire ?",["1","2","3","5"],"3"],
+["Quel pays a gagné la Coupe du Monde 2014 ?",["Allemagne","Brésil","France","Argentine"],"Allemagne"],
+["Quel pays a gagné la Coupe du Monde 2010 ?",["Espagne","Pays-Bas","Brésil","Allemagne"],"Espagne"],
+["Qui a remporté le Ballon d'Or 2022 ?",["Karim Benzema","Messi","Mané","Lewandowski"],"Karim Benzema"]
 ],
-
-difficile: [
-
-["Qui a remporté le Ballon d'Or en 2013 ?", ["Cristiano Ronaldo","Lionel Messi","Franck Ribéry","Andrés Iniesta"], "Cristiano Ronaldo"],
-["Quel joueur a marqué 13 buts lors de la Coupe du Monde 1958 ?", ["Just Fontaine","Pelé","Ronaldo","Klose"], "Just Fontaine"],
-["Quel club a remporté la première Coupe d'Europe des clubs champions ?", ["Real Madrid","Benfica","Milan","Barcelone"], "Real Madrid"],
-["Qui a marqué le but surnommé la Main de Dieu ?", ["Diego Maradona","Pelé","Zidane","Cruyff"], "Diego Maradona"],
-["Quel gardien est le seul à avoir remporté le Ballon d'Or ?", ["Lev Yachine","Buffon","Casillas","Neuer"], "Lev Yachine"],
-["Quel pays a remporté la première Coupe du Monde en 1930 ?", ["Uruguay","Brésil","Argentine","Italie"], "Uruguay"],
-["Quel joueur est surnommé Il Fenomeno ?", ["Ronaldo","Ronaldinho","Romário","Kaká"], "Ronaldo"],
-["Quel pays a remporté la Coupe du Monde 1966 ?", ["Angleterre","Allemagne","Brésil","Italie"], "Angleterre"],
-["Quel joueur a remporté le Ballon d'Or en 2007 ?", ["Kaká","Ronaldo","Messi","Ronaldinho"], "Kaká"],
-["Quel club a remporté le plus de Ligues des champions ?", ["Real Madrid","Milan","Liverpool","Barcelone"], "Real Madrid"],
-["Quel joueur a remporté le Ballon d'Or en 1995 ?", ["George Weah","Ronaldo","Zidane","Baggio"], "George Weah"],
-["Quel pays a remporté l'Euro 2004 ?", ["Grèce","Portugal","France","Italie"], "Grèce"],
-["Qui a remporté la Coupe du Monde 1998 ?", ["France","Brésil","Italie","Allemagne"], "France"],
-["Quel joueur a marqué le plus de buts en une seule Coupe du Monde ?", ["Just Fontaine","Pelé","Klose","Ronaldo"], "Just Fontaine"],
-["Quel club est surnommé les Red Devils ?", ["Manchester United","Liverpool","Arsenal","Chelsea"], "Manchester United"],
-["Quel joueur a remporté le Ballon d'Or 2002 ?", ["Ronaldo","Zidane","Kahn","Roberto Carlos"], "Ronaldo"],
-["Quel pays a remporté la Coupe du Monde 1974 ?", ["Allemagne de l'Ouest","Pays-Bas","Brésil","Italie"], "Allemagne de l'Ouest"],
-["Quel joueur est surnommé La Pulga ?", ["Lionel Messi","Maradona","Neymar","Aguero"], "Lionel Messi"],
-["Quel club joue au Signal Iduna Park ?", ["Borussia Dortmund","Bayern Munich","Leverkusen","Schalke"], "Borussia Dortmund"],
-["Quel pays a remporté l'Euro 1992 ?", ["Danemark","Allemagne","France","Pays-Bas"], "Danemark"]
-
+difficile:[
+["Qui a remporté le Ballon d'Or en 2013 ?",["Cristiano Ronaldo","Lionel Messi","Franck Ribéry","Iniesta"],"Cristiano Ronaldo"],
+["Quel joueur a marqué 13 buts lors de la Coupe du Monde 1958 ?",["Just Fontaine","Pelé","Ronaldo","Klose"],"Just Fontaine"],
+["Qui a marqué le but surnommé la Main de Dieu ?",["Maradona","Pelé","Zidane","Cruyff"],"Maradona"],
+["Quel gardien est le seul à avoir remporté le Ballon d'Or ?",["Lev Yachine","Buffon","Casillas","Neuer"],"Lev Yachine"],
+["Quel pays a remporté la première Coupe du Monde en 1930 ?",["Uruguay","Brésil","Argentine","Italie"],"Uruguay"],
+["Quel joueur est surnommé Il Fenomeno ?",["Ronaldo","Ronaldinho","Romário","Kaká"],"Ronaldo"],
+["Quel pays a remporté la Coupe du Monde 1966 ?",["Angleterre","Allemagne","Brésil","Italie"],"Angleterre"],
+["Quel joueur a remporté le Ballon d'Or en 2007 ?",["Kaká","Ronaldo","Messi","Ronaldinho"],"Kaká"],
+["Quel club a remporté le plus de Ligues des champions ?",["Real Madrid","Milan","Liverpool","Barcelone"],"Real Madrid"],
+["Quel joueur a remporté le Ballon d'Or en 1995 ?",["George Weah","Ronaldo","Zidane","Baggio"],"George Weah"],
+["Quel pays a remporté l'Euro 2004 ?",["Grèce","Portugal","France","Italie"],"Grèce"],
+["Qui a remporté la Coupe du Monde 1998 ?",["France","Brésil","Italie","Allemagne"],"France"],
+["Quel joueur a marqué le plus de buts en une seule Coupe du Monde ?",["Just Fontaine","Pelé","Klose","Ronaldo"],"Just Fontaine"],
+["Quel club est surnommé les Red Devils ?",["Manchester United","Liverpool","Arsenal","Chelsea"],"Manchester United"],
+["Quel joueur a remporté le Ballon d'Or 2002 ?",["Ronaldo","Zidane","Kahn","Roberto Carlos"],"Ronaldo"]
 ]
-
 },
 
-gaming: {
-
-facile: [
-
-["Dans quel jeu trouve-t-on Steve ?", ["Minecraft","Fortnite","Roblox","Among Us"], "Minecraft"],
-["Dans quel jeu peut-on créer ses propres jeux ?", ["Roblox","Fortnite","FIFA","Among Us"], "Roblox"],
-["Dans quel jeu trouve-t-on des Creepers ?", ["Minecraft","Fortnite","Brawl Stars","GTA"], "Minecraft"],
-["Quel jeu contient des imposteurs ?", ["Among Us","Minecraft","Roblox","Mario Kart"], "Among Us"],
-["Quel jeu contient des Brawlers ?", ["Brawl Stars","Fortnite","Minecraft","Roblox"], "Brawl Stars"],
-["Quel personnage porte une casquette rouge ?", ["Mario","Sonic","Steve","Pac-Man"], "Mario"],
-["Quel personnage bleu court très vite ?", ["Sonic","Mario","Pac-Man","Luigi"], "Sonic"]
-
+gaming:{
+facile:[
+["Dans quel jeu trouve-t-on Steve ?",["Minecraft","Fortnite","Roblox","Among Us"],"Minecraft"],
+["Dans quel jeu peut-on créer ses propres jeux ?",["Roblox","Fortnite","FIFA","Among Us"],"Roblox"],
+["Dans quel jeu trouve-t-on des Creepers ?",["Minecraft","Fortnite","Brawl Stars","GTA"],"Minecraft"],
+["Quel jeu contient des imposteurs ?",["Among Us","Minecraft","Roblox","Mario Kart"],"Among Us"],
+["Quel jeu contient des Brawlers ?",["Brawl Stars","Fortnite","Minecraft","Roblox"],"Brawl Stars"]
 ],
-
-moyen: [
-
-["Où trouve-t-on l'Ender Dragon ?", ["L'End","Le Nether","L'Overworld","Le Void"], "L'End"],
-["Quelle entreprise est associée à Sonic ?", ["Sega","Nintendo","Mojang","Supercell"], "Sega"],
-["Quel jeu a été créé par Mojang ?", ["Minecraft","Fortnite","Roblox","Brawl Stars"], "Minecraft"],
-["Quel jeu est développé par Supercell ?", ["Brawl Stars","Minecraft","Fortnite","GTA"], "Brawl Stars"],
-["Comment appelle-t-on la zone qui rétrécit dans Fortnite ?", ["La tempête","Le portail","Le tunnel","La bulle"], "La tempête"],
-["Quel jeu mélange voitures et football ?", ["Rocket League","FIFA","Mario Kart","GTA"], "Rocket League"],
-["Quel matériau sert à créer un portail du Nether ?", ["Obsidienne","Diamant","Fer","Or"], "Obsidienne"],
-["Comment appelle-t-on les personnages de Brawl Stars ?", ["Brawlers","Champions","Soldats","Avatars"], "Brawlers"],
-["Quel personnage est le frère de Mario ?", ["Luigi","Sonic","Link","Steve"], "Luigi"],
-["Quel jeu contient Pikachu ?", ["Pokémon","Minecraft","Fortnite","Roblox"], "Pokémon"],
-["Dans quel jeu trouve-t-on Mortis ?", ["Brawl Stars","Fortnite","Roblox","Among Us"], "Brawl Stars"]
-
+moyen:[
+["Où trouve-t-on l'Ender Dragon ?",["L'End","Le Nether","L'Overworld","Le Void"],"L'End"],
+["Quelle entreprise est associée à Sonic ?",["Sega","Nintendo","Mojang","Supercell"],"Sega"],
+["Quel jeu a été créé par Mojang ?",["Minecraft","Fortnite","Roblox","Brawl Stars"],"Minecraft"],
+["Quel jeu est développé par Supercell ?",["Brawl Stars","Minecraft","Fortnite","GTA"],"Brawl Stars"],
+["Comment appelle-t-on la zone qui rétrécit dans Fortnite ?",["La tempête","Le portail","Le tunnel","La bulle"],"La tempête"],
+["Quel jeu mélange voitures et football ?",["Rocket League","FIFA","Mario Kart","GTA"],"Rocket League"],
+["Quel matériau sert à créer un portail du Nether ?",["Obsidienne","Diamant","Fer","Or"],"Obsidienne"],
+["Comment appelle-t-on les personnages de Brawl Stars ?",["Brawlers","Champions","Soldats","Avatars"],"Brawlers"],
+["Quel personnage est le frère de Mario ?",["Luigi","Sonic","Link","Steve"],"Luigi"],
+["Quel jeu contient Pikachu ?",["Pokémon","Minecraft","Fortnite","Roblox"],"Pokémon"]
 ],
-
-difficile: [
-
-["Quel est le nom du créateur original de Minecraft ?", ["Markus Persson","Gabe Newell","Tim Sweeney","Hideo Kojima"], "Markus Persson"],
-["Quelle entreprise a créé Fortnite ?", ["Epic Games","Valve","Nintendo","Mojang"], "Epic Games"],
-["Quel langage est utilisé dans Roblox Studio ?", ["Luau","Python","Java","PHP"], "Luau"],
-["Quel boss Minecraft invoque des crânes explosifs ?", ["Wither","Ender Dragon","Warden","Iron Golem"], "Wither"],
-["Comment s'appelait Minecraft au tout début ?", ["Cave Game","Block World","Mine World","Craft Land"], "Cave Game"],
-["Quel moteur est utilisé par Fortnite ?", ["Unreal Engine","Unity","Source","CryEngine"], "Unreal Engine"],
-["Dans quel jeu se trouve Black Mesa ?", ["Half-Life","Portal","Fortnite","Minecraft"], "Half-Life"],
-["Quel jeu est développé par Riot Games ?", ["League of Legends","Minecraft","GTA","Fortnite"], "League of Legends"],
-["Quel studio a créé The Legend of Zelda ?", ["Nintendo","Sega","Valve","Mojang"], "Nintendo"],
-["Quel boss apparaît dans les anciennes cités de Minecraft ?", ["Warden","Wither","Ender Dragon","Elder Guardian"], "Warden"],
-["Quel studio a créé Portal ?", ["Valve","Epic Games","Rockstar","Ubisoft"], "Valve"],
-["Quel studio a créé Brawl Stars ?", ["Supercell","Riot Games","Epic Games","Valve"], "Supercell"],
-["Quel langage utilise principalement Roblox Studio ?", ["Luau","C#","C++","Java"], "Luau"],
-["Quel studio a créé GTA ?", ["Rockstar Games","Valve","Epic Games","Ubisoft"], "Rockstar Games"],
-["Quel jeu contient le personnage Gordon Freeman ?", ["Half-Life","Portal","Minecraft","Fortnite"], "Half-Life"],
-["Quel studio a créé Assassin's Creed ?", ["Ubisoft","Rockstar","Valve","Nintendo"], "Ubisoft"]
-
+difficile:[
+["Quel est le nom du créateur original de Minecraft ?",["Markus Persson","Gabe Newell","Tim Sweeney","Hideo Kojima"],"Markus Persson"],
+["Quelle entreprise a créé Fortnite ?",["Epic Games","Valve","Nintendo","Mojang"],"Epic Games"],
+["Quel langage est utilisé dans Roblox Studio ?",["Luau","Python","Java","PHP"],"Luau"],
+["Quel boss Minecraft invoque des crânes explosifs ?",["Wither","Ender Dragon","Warden","Iron Golem"],"Wither"],
+["Comment s'appelait Minecraft au tout début ?",["Cave Game","Block World","Mine World","Craft Land"],"Cave Game"],
+["Quel moteur est utilisé par Fortnite ?",["Unreal Engine","Unity","Source","CryEngine"],"Unreal Engine"],
+["Dans quel jeu se trouve Black Mesa ?",["Half-Life","Portal","Fortnite","Minecraft"],"Half-Life"],
+["Quel jeu est développé par Riot Games ?",["League of Legends","Minecraft","GTA","Fortnite"],"League of Legends"],
+["Quel studio a créé The Legend of Zelda ?",["Nintendo","Sega","Valve","Mojang"],"Nintendo"],
+["Quel boss apparaît dans les anciennes cités de Minecraft ?",["Warden","Wither","Ender Dragon","Elder Guardian"],"Warden"]
 ]
-
 },
 
-culture: {
-
-facile: [
-
-["Quelle est la capitale de la France ?", ["Paris","Lyon","Marseille","Lille"], "Paris"],
-["Quelle planète est surnommée la planète rouge ?", ["Mars","Jupiter","Vénus","Saturne"], "Mars"],
-["Quelle planète habitons-nous ?", ["La Terre","Mars","Jupiter","Vénus"], "La Terre"],
-["Quel est le satellite naturel de la Terre ?", ["La Lune","Le Soleil","Mars","Vénus"], "La Lune"],
-["Dans quel pays se trouve la Tour Eiffel ?", ["France","Italie","Espagne","Belgique"], "France"],
-["Quelle est la capitale de l'Italie ?", ["Rome","Milan","Venise","Naples"], "Rome"],
-["Quel animal est le roi de la jungle ?", ["Lion","Tigre","Éléphant","Loup"], "Lion"]
-
+culture:{
+facile:[
+["Quelle est la capitale de la France ?",["Paris","Lyon","Marseille","Lille"],"Paris"],
+["Quelle planète est surnommée la planète rouge ?",["Mars","Jupiter","Vénus","Saturne"],"Mars"],
+["Quelle planète habitons-nous ?",["La Terre","Mars","Jupiter","Vénus"],"La Terre"],
+["Quel est le satellite naturel de la Terre ?",["La Lune","Le Soleil","Mars","Vénus"],"La Lune"],
+["Dans quel pays se trouve la Tour Eiffel ?",["France","Italie","Espagne","Belgique"],"France"]
 ],
-
-moyen: [
-
-["Quelle est la capitale du Canada ?", ["Ottawa","Toronto","Montréal","Vancouver"], "Ottawa"],
-["Quel fleuve traverse Paris ?", ["La Seine","Le Rhône","La Loire","Le Rhin"], "La Seine"],
-["Dans quel pays se trouve le Machu Picchu ?", ["Pérou","Mexique","Brésil","Chili"], "Pérou"],
-["Quel est le plus grand désert chaud ?", ["Sahara","Gobi","Atacama","Kalahari"], "Sahara"],
-["Quel est le plus grand continent ?", ["Asie","Afrique","Europe","Océanie"], "Asie"],
-["Quelle est la plus haute montagne du monde ?", ["Everest","K2","Mont Blanc","Kilimandjaro"], "Everest"],
-["Quelle langue est parlée au Brésil ?", ["Portugais","Espagnol","Français","Italien"], "Portugais"],
-["Dans quel pays se trouve le Taj Mahal ?", ["Inde","Chine","Japon","Pakistan"], "Inde"],
-["Quelle est la capitale du Japon ?", ["Tokyo","Kyoto","Osaka","Nagoya"], "Tokyo"],
-["Quel océan est le plus grand ?", ["Pacifique","Atlantique","Indien","Arctique"], "Pacifique"],
-["Dans quel pays se trouve la Grande Muraille ?", ["Chine","Japon","Corée","Inde"], "Chine"]
-
+moyen:[
+["Quelle est la capitale du Canada ?",["Ottawa","Toronto","Montréal","Vancouver"],"Ottawa"],
+["Quel fleuve traverse Paris ?",["La Seine","Le Rhône","La Loire","Le Rhin"],"La Seine"],
+["Dans quel pays se trouve le Machu Picchu ?",["Pérou","Mexique","Brésil","Chili"],"Pérou"],
+["Quel est le plus grand désert chaud ?",["Sahara","Gobi","Atacama","Kalahari"],"Sahara"],
+["Quel est le plus grand continent ?",["Asie","Afrique","Europe","Océanie"],"Asie"],
+["Quelle est la plus haute montagne du monde ?",["Everest","K2","Mont Blanc","Kilimandjaro"],"Everest"],
+["Quelle langue est parlée au Brésil ?",["Portugais","Espagnol","Français","Italien"],"Portugais"],
+["Dans quel pays se trouve le Taj Mahal ?",["Inde","Chine","Japon","Pakistan"],"Inde"],
+["Quelle est la capitale du Japon ?",["Tokyo","Kyoto","Osaka","Nagoya"],"Tokyo"],
+["Quel océan est le plus grand ?",["Pacifique","Atlantique","Indien","Arctique"],"Pacifique"]
 ],
-
-difficile: [
-
-["Quelle est la capitale de l'Australie ?", ["Canberra","Sydney","Melbourne","Perth"], "Canberra"],
-["Quel est le plus petit État du monde ?", ["Vatican","Monaco","Malte","Luxembourg"], "Vatican"],
-["Quel détroit sépare l'Espagne et le Maroc ?", ["Gibraltar","Bosphore","Béring","Dardanelles"], "Gibraltar"],
-["Quelle est la capitale de la Nouvelle-Zélande ?", ["Wellington","Auckland","Christchurch","Hamilton"], "Wellington"],
-["Dans quel pays se trouve Angkor Wat ?", ["Cambodge","Thaïlande","Vietnam","Indonésie"], "Cambodge"],
-["Quelle est la capitale de la Suisse ?", ["Berne","Zurich","Genève","Lausanne"], "Berne"],
-["Quelle est la capitale de la Turquie ?", ["Ankara","Istanbul","Izmir","Antalya"], "Ankara"],
-["Quelle monnaie est utilisée au Japon ?", ["Yen","Yuan","Won","Dollar"], "Yen"],
-["Quel fleuve est le plus long d'Europe ?", ["Volga","Danube","Rhin","Loire"], "Volga"],
-["Dans quel pays se trouve le désert d'Atacama ?", ["Chili","Argentine","Pérou","Brésil"], "Chili"],
-["Quelle est la capitale de la Mongolie ?", ["Oulan-Bator","Astana","Bichkek","Tachkent"], "Oulan-Bator"],
-["Quel pays est traversé par le canal de Panama ?", ["Panama","Colombie","Mexique","Pérou"], "Panama"],
-["Quelle est la capitale du Bhoutan ?", ["Thimphou","Katmandou","Dacca","New Delhi"], "Thimphou"],
-["Quelle mer est située entre l'Europe et l'Afrique ?", ["Méditerranée","Baltique","Noire","Caspienne"], "Méditerranée"],
-["Quelle est la capitale du Maroc ?", ["Rabat","Casablanca","Marrakech","Fès"], "Rabat"],
-["Quelle est la capitale de la Finlande ?", ["Helsinki","Oslo","Stockholm","Copenhague"], "Helsinki"]
-
+difficile:[
+["Quelle est la capitale de l'Australie ?",["Canberra","Sydney","Melbourne","Perth"],"Canberra"],
+["Quel est le plus petit État du monde ?",["Vatican","Monaco","Malte","Luxembourg"],"Vatican"],
+["Quel détroit sépare l'Espagne et le Maroc ?",["Gibraltar","Bosphore","Béring","Dardanelles"],"Gibraltar"],
+["Quelle est la capitale de la Nouvelle-Zélande ?",["Wellington","Auckland","Christchurch","Hamilton"],"Wellington"],
+["Dans quel pays se trouve Angkor Wat ?",["Cambodge","Thaïlande","Vietnam","Indonésie"],"Cambodge"],
+["Quelle est la capitale de la Suisse ?",["Berne","Zurich","Genève","Lausanne"],"Berne"],
+["Quelle est la capitale de la Turquie ?",["Ankara","Istanbul","Izmir","Antalya"],"Ankara"],
+["Quelle monnaie est utilisée au Japon ?",["Yen","Yuan","Won","Dollar"],"Yen"],
+["Quel fleuve est le plus long d'Europe ?",["Volga","Danube","Rhin","Loire"],"Volga"],
+["Dans quel pays se trouve le désert d'Atacama ?",["Chili","Argentine","Pérou","Brésil"],"Chili"]
 ]
-
 },
 
-films: {
-
-facile: [
-
-["Dans quelle école va Harry Potter ?", ["Poudlard","Narnia","Gotham","Asgard"], "Poudlard"],
-["Comment s'appelle Spider-Man ?", ["Peter Parker","Tony Stark","Bruce Wayne","Clark Kent"], "Peter Parker"],
-["Qui vit dans un ananas sous la mer ?", ["Bob l'éponge","Shrek","Simba","Stitch"], "Bob l'éponge"],
-["Comment s'appelle le père de Simba ?", ["Mufasa","Scar","Timon","Pumbaa"], "Mufasa"],
-["Quel personnage est un ogre vert ?", ["Shrek","Hulk","Yoda","Mike"], "Shrek"],
-["Dans quel film trouve-t-on Elsa ?", ["La Reine des Neiges","Cars","Coco","Shrek"], "La Reine des Neiges"],
-["Quel héros possède un marteau ?", ["Thor","Batman","Hulk","Flash"], "Thor"]
-
+films:{
+facile:[
+["Dans quelle école va Harry Potter ?",["Poudlard","Narnia","Gotham","Asgard"],"Poudlard"],
+["Comment s'appelle Spider-Man ?",["Peter Parker","Tony Stark","Bruce Wayne","Clark Kent"],"Peter Parker"],
+["Qui vit dans un ananas sous la mer ?",["Bob l'éponge","Shrek","Simba","Stitch"],"Bob l'éponge"],
+["Comment s'appelle le père de Simba ?",["Mufasa","Scar","Timon","Pumbaa"],"Mufasa"],
+["Quel personnage est un ogre vert ?",["Shrek","Hulk","Yoda","Mike"],"Shrek"]
 ],
-
-moyen: [
-
-["Qui est le père de Luke Skywalker ?", ["Dark Vador","Yoda","Obi-Wan","Han Solo"], "Dark Vador"],
-["Comment s'appelle le marteau de Thor ?", ["Mjolnir","Stormbreaker","Excalibur","Aegis"], "Mjolnir"],
-["Quel héros porte une armure rouge et dorée ?", ["Iron Man","Thor","Hulk","Batman"], "Iron Man"],
-["Qui dit « Vers l'infini et au-delà » ?", ["Buzz l'Éclair","Woody","Olaf","Simba"], "Buzz l'Éclair"],
-["Dans quel film trouve-t-on Jack Sparrow ?", ["Pirates des Caraïbes","Titanic","Avatar","Jumanji"], "Pirates des Caraïbes"],
-["Quel héros possède un bouclier avec une étoile ?", ["Captain America","Iron Man","Thor","Hulk"], "Captain America"],
-["Dans Cars, comment s'appelle la voiture principale ?", ["Flash McQueen","Mater","Sally","Doc"], "Flash McQueen"],
-["Comment s'appelle la planète dans Avatar ?", ["Pandora","Tatooine","Mars","Arrakis"], "Pandora"],
-["Quel héros utilise un arc dans Avengers ?", ["Hawkeye","Thor","Hulk","Vision"], "Hawkeye"],
-["Comment s'appelle l'ami roux de Harry Potter ?", ["Ron Weasley","Drago","Neville","Sirius"], "Ron Weasley"],
-["Quel personnage bleu vient de Lilo et Stitch ?", ["Stitch","Olaf","Simba","Woody"], "Stitch"]
-
+moyen:[
+["Qui est le père de Luke Skywalker ?",["Dark Vador","Yoda","Obi-Wan","Han Solo"],"Dark Vador"],
+["Comment s'appelle le marteau de Thor ?",["Mjolnir","Stormbreaker","Excalibur","Aegis"],"Mjolnir"],
+["Quel héros porte une armure rouge et dorée ?",["Iron Man","Thor","Hulk","Batman"],"Iron Man"],
+["Qui dit « Vers l'infini et au-delà » ?",["Buzz l'Éclair","Woody","Olaf","Simba"],"Buzz l'Éclair"],
+["Dans quel film trouve-t-on Jack Sparrow ?",["Pirates des Caraïbes","Titanic","Avatar","Jumanji"],"Pirates des Caraïbes"],
+["Quel héros possède un bouclier avec une étoile ?",["Captain America","Iron Man","Thor","Hulk"],"Captain America"],
+["Dans Cars, comment s'appelle la voiture principale ?",["Flash McQueen","Mater","Sally","Doc"],"Flash McQueen"],
+["Comment s'appelle la planète dans Avatar ?",["Pandora","Tatooine","Mars","Arrakis"],"Pandora"],
+["Quel héros utilise un arc dans Avengers ?",["Hawkeye","Thor","Hulk","Vision"],"Hawkeye"],
+["Comment s'appelle l'ami roux de Harry Potter ?",["Ron Weasley","Drago","Neville","Sirius"],"Ron Weasley"]
 ],
+difficile:[
+["Qui a réalisé Inception ?",["Christopher Nolan","James Cameron","Spielberg","Tim Burton"],"Christopher Nolan"],
+["Quel est le prénom de Dumbledore ?",["Albus","Severus","Sirius","Remus"],"Albus"],
+["Qui a réalisé Titanic ?",["James Cameron","Nolan","Spielberg","Ridley Scott"],"James Cameron"],
+["Dans quel film trouve-t-on Tyler Durden ?",["Fight Club","Matrix","Inception","Seven"],"Fight Club"],
+["Comment s'appelle le vaisseau de Han Solo ?",["Millennium Falcon","Enterprise","Nostromo","Serenity"],"Millennium Falcon"],
+["Qui a réalisé Pulp Fiction ?",["Quentin Tarantino","Tim Burton","Nolan","James Cameron"],"Quentin Tarantino"],
+["Dans quel film trouve-t-on Jack Dawson ?",["Titanic","Avatar","Inception","Joker"],"Titanic"],
+["Quelle pilule choisit Neo dans Matrix ?",["Rouge","Bleue","Verte","Jaune"],"Rouge"],
+["Qui porte l'Anneau unique ?",["Frodon","Aragorn","Gandalf","Legolas"],"Frodon"],
+["Qui a réalisé Avatar ?",["James Cameron","Christopher Nolan","Spielberg","Tarantino"],"James Cameron"]
+]
+},
 
-difficile: [
+auto:{
+facile:[
+["Quelle marque fabrique la 911 ?",["Porsche","Ferrari","BMW","Audi"],"Porsche"],
+["Quelle couleur est célèbre pour Ferrari ?",["Rouge","Bleu","Vert","Rose"],"Rouge"],
+["Dans quelle compétition roule-t-on avec des F1 ?",["Formule 1","MotoGP","NBA","WRC"],"Formule 1"],
+["Combien de roues possède une voiture classique ?",["2","3","4","6"],"4"],
+["Quel constructeur fabrique la Mustang ?",["Ford","BMW","Toyota","Honda"],"Ford"]
+],
+moyen:[
+["Quel pilote est surnommé le Baron Rouge ?",["Michael Schumacher","Lewis Hamilton","Senna","Alonso"],"Michael Schumacher"],
+["Quel pays accueille le Grand Prix de Monaco ?",["Monaco","France","Italie","Espagne"],"Monaco"],
+["Quelle marque fabrique la Supra ?",["Toyota","Ferrari","Porsche","Ford"],"Toyota"],
+["Que signifie ABS ?",["Système antiblocage","Turbo","Airbag","GPS"],"Système antiblocage"],
+["Quel pilote possède 7 titres mondiaux en F1 ?",["Lewis Hamilton","Alonso","Vettel","Leclerc"],"Lewis Hamilton"]
+],
+difficile:[
+["Quel pilote a remporté le championnat F1 2005 ?",["Fernando Alonso","Michael Schumacher","Kimi Räikkönen","Hamilton"],"Fernando Alonso"],
+["Quelle équipe est associée à Maranello ?",["Ferrari","Mercedes","McLaren","Red Bull"],"Ferrari"],
+["Quel pilote brésilien a remporté trois titres mondiaux ?",["Ayrton Senna","Rubens Barrichello","Felipe Massa","Piquet"],"Ayrton Senna"],
+["Quel circuit est surnommé le Temple de la vitesse ?",["Monza","Monaco","Spa","Suzuka"],"Monza"],
+["Quel pilote a remporté le titre 2021 ?",["Max Verstappen","Hamilton","Vettel","Leclerc"],"Max Verstappen"]
+]
+},
 
-["Qui a réalisé Inception ?", ["Christopher Nolan","James Cameron","Spielberg","Tim Burton"], "Christopher Nolan"],
-["Quel est le prénom de Dumbledore ?", ["Albus","Severus","Sirius","Remus"], "Albus"],
-["Qui a réalisé Titanic ?", ["James Cameron","Nolan","Spielberg","Ridley Scott"], "James Cameron"],
-["Dans quel film trouve-t-on Tyler Durden ?", ["Fight Club","Matrix","Inception","Seven"], "Fight Club"],
-["Comment s'appelle le vaisseau de Han Solo ?", ["Millennium Falcon","Enterprise","Nostromo","Serenity"], "Millennium Falcon"],
-["Qui a réalisé Pulp Fiction ?", ["Quentin Tarantino","Tim Burton","Nolan","James Cameron"], "Quentin Tarantino"],
-["Dans quel film trouve-t-on Jack Dawson ?", ["Titanic","Avatar","Inception","Joker"], "Titanic"],
-["Quelle pilule choisit Neo dans Matrix ?", ["Rouge","Bleue","Verte","Jaune"], "Rouge"],
-["Qui porte l'Anneau unique ?", ["Frodon","Aragorn","Gandalf","Legolas"], "Frodon"],
-["Quel professeur enseigne les potions au début de Harry Potter ?", ["Severus Rogue","Dumbledore","Hagrid","Lupin"], "Severus Rogue"],
-["Qui a réalisé Avatar ?", ["James Cameron","Christopher Nolan","Spielberg","Tarantino"], "James Cameron"],
-["Dans quel film trouve-t-on Travis Bickle ?", ["Taxi Driver","Joker","Fight Club","Seven"], "Taxi Driver"],
-["Qui a réalisé Interstellar ?", ["Christopher Nolan","James Cameron","Ridley Scott","Spielberg"], "Christopher Nolan"],
-["Quel personnage dit « Why so serious? » ?", ["Le Joker","Batman","Bane","Double-Face"], "Le Joker"],
-["Quel réalisateur a réalisé Le Seigneur des Anneaux ?", ["Peter Jackson","James Cameron","Christopher Nolan","Ridley Scott"], "Peter Jackson"],
-["Dans quel film apparaît Anton Chigurh ?", ["No Country for Old Men","Seven","Fight Club","Heat"], "No Country for Old Men"],
-["Qui a réalisé Parasite ?", ["Bong Joon-ho","Park Chan-wook","Hayao Miyazaki","Ang Lee"], "Bong Joon-ho"]
+basket:{
+facile:[
+["Combien de joueurs d'une équipe sont sur le terrain ?",["4","5","6","7"],"5"],
+["Combien vaut un lancer franc ?",["1","2","3","4"],"1"],
+["Dans quel sport joue-t-on en NBA ?",["Basketball","Football","Tennis","Rugby"],"Basketball"],
+["Quel joueur est surnommé King James ?",["LeBron James","Curry","Jordan","Durant"],"LeBron James"],
+["Combien vaut un panier derrière la ligne à trois points ?",["1","2","3","4"],"3"]
+],
+moyen:[
+["Quel joueur est célèbre pour ses tirs à trois points ?",["Stephen Curry","Ronaldo","Messi","Nadal"],"Stephen Curry"],
+["Quelle équipe joue au Madison Square Garden ?",["New York Knicks","Lakers","Celtics","Heat"],"New York Knicks"],
+["Quel joueur porte souvent le numéro 23 ?",["LeBron James","Curry","Doncic","Durant"],"LeBron James"],
+["Quelle équipe a remporté de nombreux titres dans les années 1990 avec Jordan ?",["Chicago Bulls","Lakers","Celtics","Heat"],"Chicago Bulls"],
+["Quelle conférence possède les Lakers ?",["Ouest","Est","Nord","Sud"],"Ouest"]
+],
+difficile:[
+["Combien de titres NBA Michael Jordan a-t-il remportés ?",["4","5","6","7"],"6"],
+["Quel joueur a marqué 100 points dans un match NBA ?",["Wilt Chamberlain","Jordan","Kobe","Curry"],"Wilt Chamberlain"],
+["Quelle équipe a pour star historique Larry Bird ?",["Boston Celtics","Lakers","Bulls","Heat"],"Boston Celtics"],
+["Quel joueur est surnommé Black Mamba ?",["Kobe Bryant","Jordan","Curry","Durant"],"Kobe Bryant"],
+["Quel joueur a remporté le plus de titres NBA avec les Celtics dans l'ère moderne ?",["Bill Russell","Jordan","Kobe","LeBron"],"Bill Russell"]
+]
+},
 
+science:{
+facile:[
+["Quelle planète est la plus proche du Soleil ?",["Mercure","Vénus","Terre","Mars"],"Mercure"],
+["Quel gaz respirons-nous principalement ?",["Azote","Oxygène","CO2","Hydrogène"],"Azote"],
+["Combien de pattes a une araignée ?",["6","8","10","12"],"8"],
+["Quelle force nous attire vers le sol ?",["Gravité","Magnétisme","Électricité","Pression"],"Gravité"],
+["Quelle partie de la plante absorbe l'eau ?",["Racines","Fleurs","Fruits","Feuilles"],"Racines"]
+],
+moyen:[
+["Quelle est la formule de l'eau ?",["H2O","CO2","O2","NaCl"],"H2O"],
+["Combien de chromosomes possède normalement l'être humain ?",["23","46","48","44"],"46"],
+["Quel organe pompe le sang ?",["Cœur","Poumon","Foie","Rein"],"Cœur"],
+["Quel métal est liquide à température ambiante ?",["Mercure","Fer","Or","Cuivre"],"Mercure"],
+["Quelle unité mesure une force ?",["Newton","Watt","Volt","Joule"],"Newton"]
+],
+difficile:[
+["Quelle particule possède une charge négative ?",["Électron","Proton","Neutron","Photon"],"Électron"],
+["Quel est le symbole chimique de l'or ?",["Au","Ag","Fe","O"],"Au"],
+["Quelle vitesse est approximativement celle de la lumière ?",["300 000 km/s","30 000 km/s","3 000 km/s","3 millions km/s"],"300 000 km/s"],
+["Quel est le pH d'une solution neutre ?",["7","0","14","10"],"7"],
+["Quelle loi est associée à E=mc² ?",["Relativité","Gravitation","Évolution","Thermodynamique"],"Relativité"]
+]
+},
+
+space:{
+facile:[
+["Quelle planète est surnommée la planète rouge ?",["Mars","Vénus","Jupiter","Saturne"],"Mars"],
+["Quelle planète possède de grands anneaux visibles ?",["Saturne","Mars","Mercure","Vénus"],"Saturne"],
+["Quel est le satellite naturel de la Terre ?",["Lune","Mars","Soleil","Titan"],"Lune"],
+["Quelle étoile est au centre du système solaire ?",["Soleil","Sirius","Vega","Polaris"],"Soleil"],
+["Quelle planète est la plus grande ?",["Jupiter","Terre","Mars","Neptune"],"Jupiter"]
+],
+moyen:[
+["Combien de planètes compte le système solaire ?",["7","8","9","10"],"8"],
+["Quelle planète est la plus proche du Soleil ?",["Mercure","Vénus","Terre","Mars"],"Mercure"],
+["Quelle planète est connue pour ses vents extrêmement rapides ?",["Neptune","Mercure","Mars","Vénus"],"Neptune"],
+["Quel est le nom de notre galaxie ?",["Voie lactée","Andromède","Orion","Sombrero"],"Voie lactée"],
+["Quel objet peut avoir un horizon des événements ?",["Trou noir","Planète","Comète","Astéroïde"],"Trou noir"]
+],
+difficile:[
+["Quelle planète tourne presque sur le côté ?",["Uranus","Mars","Jupiter","Mercure"],"Uranus"],
+["Quel est le plus grand satellite de Saturne ?",["Titan","Europe","Ganymède","Io"],"Titan"],
+["Quelle galaxie est la plus proche grande galaxie de la Voie lactée ?",["Andromède","Sombrero","Whirlpool","Triangulum"],"Andromède"],
+["Quel est le nom de la première personne sur la Lune ?",["Neil Armstrong","Buzz Aldrin","Yuri Gagarin","Michael Collins"],"Neil Armstrong"],
+["Quel phénomène produit une étoile massive en fin de vie ?",["Supernova","Éclipse","Aurore","Marée"],"Supernova"]
+]
+},
+
+music:{
+facile:[
+["Combien de notes principales possède la gamme classique ?",["5","7","8","12"],"7"],
+["Quel instrument possède généralement 88 touches ?",["Piano","Guitare","Violon","Flûte"],"Piano"],
+["Quel instrument possède six cordes ?",["Guitare","Piano","Trompette","Batterie"],"Guitare"],
+["Quel symbole indique souvent une pause en musique ?",["Silence","Tempo","Dièse","Clé"],"Silence"],
+["Quel instrument fait partie des percussions ?",["Batterie","Violon","Flûte","Piano"],"Batterie"]
+],
+moyen:[
+["Combien de demi-tons y a-t-il dans une octave ?",["8","10","12","14"],"12"],
+["Quel compositeur a écrit la 9e symphonie ?",["Beethoven","Mozart","Bach","Vivaldi"],"Beethoven"],
+["Quel instrument possède des cordes frappées par des marteaux ?",["Piano","Violon","Flûte","Trompette"],"Piano"],
+["Que mesure le BPM ?",["Tempo","Volume","Tonalité","Durée"],"Tempo"],
+["Quel genre est associé aux DJ et aux platines ?",["Électro","Classique","Opéra","Jazz"],"Électro"]
+],
+difficile:[
+["Quel compositeur est devenu sourd progressivement ?",["Beethoven","Mozart","Bach","Chopin"],"Beethoven"],
+["Combien de mouvements possède généralement une symphonie classique ?",["4","2","6","8"],"4"],
+["Quel compositeur a écrit Les Quatre Saisons ?",["Vivaldi","Bach","Mozart","Handel"],"Vivaldi"],
+["Quelle clé est aussi appelée clé de sol ?",["Clé de sol","Clé de fa","Clé d'ut","Clé de ré"],"Clé de sol"],
+["Quel terme indique jouer progressivement plus fort ?",["Crescendo","Diminuendo","Staccato","Legato"],"Crescendo"]
+]
+},
+
+animals:{
+facile:[
+["Quel animal est le plus grand animal vivant ?",["Baleine bleue","Éléphant","Girafe","Requin"],"Baleine bleue"],
+["Combien de pattes a un chien ?",["2","4","6","8"],"4"],
+["Quel animal donne du lait ?",["Vache","Lion","Aigle","Serpent"],"Vache"],
+["Quel animal est connu pour sa trompe ?",["Éléphant","Tigre","Loup","Cheval"],"Éléphant"],
+["Quel animal miaule ?",["Chat","Chien","Vache","Cheval"],"Chat"]
+],
+moyen:[
+["Quel est l'animal terrestre le plus rapide ?",["Guépard","Lion","Cheval","Léopard"],"Guépard"],
+["Quel animal possède une bosse ou deux bosses ?",["Chameau","Zèbre","Gorille","Panda"],"Chameau"],
+["Quel animal est un mammifère marin ?",["Dauphin","Truite","Requin","Pieuvre"],"Dauphin"],
+["Quel oiseau ne peut pas voler ?",["Manchot","Aigle","Faucon","Hirondelle"],"Manchot"],
+["Quel animal change souvent de couleur pour se camoufler ?",["Caméléon","Cheval","Lion","Vache"],"Caméléon"]
+],
+difficile:[
+["Quel est le plus grand animal terrestre ?",["Éléphant d'Afrique","Girafe","Rhinocéros","Hippopotame"],"Éléphant d'Afrique"],
+["Quel animal possède trois cœurs ?",["Poulpe","Dauphin","Requin","Crabe"],"Poulpe"],
+["Quel mammifère pond des œufs ?",["Ornithorynque","Dauphin","Lion","Singe"],"Ornithorynque"],
+["Quel est le plus grand félin ?",["Tigre","Lion","Léopard","Guépard"],"Tigre"],
+["Quel animal possède la morsure la plus puissante parmi les animaux actuels ?",["Crocodile marin","Lion","Requin","Gorille"],"Crocodile marin"]
 ]
 
 }
 
 };
 
-
 /* =====================================================
-   VARIABLES DU QUIZ
+   VARIABLES
 ===================================================== */
 
-let selectedCategory = "";
-let selectedLevel = "";
-let currentQuiz = [];
-let currentQuestion = 0;
-let score = 0;
+let category="";
+let level="";
+let quiz=[];
+let questionIndex=0;
+let score=0;
+let streak=0;
+let timer;
+let timeLeft=15;
 
-let streak = 0;
-
-let timer = null;
-let timeLeft = 15;
-
-let usedQuestions = {};
-
+let audioContext=null;
+let masterGain=null;
+let musicOn=localStorage.getItem("musicOn")==="true";
+let volume=Number(localStorage.getItem("volume")||35);
 
 /* =====================================================
-   MELANGER
+   PROFIL / JOUEURS
 ===================================================== */
 
-function shuffle(array) {
+let players=JSON.parse(localStorage.getItem("quizPlayers")||"{}");
+let currentPlayer=localStorage.getItem("currentPlayer")||"";
 
-    let arr = [...array];
-
-    for (
-        let i = arr.length - 1;
-        i > 0;
-        i--
-    ) {
-
-        let j =
-            Math.floor(
-                Math.random() * (i + 1)
-            );
-
-        [
-            arr[i],
-            arr[j]
-        ] = [
-            arr[j],
-            arr[i]
-        ];
-
-    }
-
-    return arr;
-
+function savePlayers(){
+    localStorage.setItem("quizPlayers",JSON.stringify(players));
 }
 
+function showProfile(){
+    let name=currentPlayer||"";
 
-/* =====================================================
-   CATEGORIES
-===================================================== */
-
-function chooseCategory(category) {
-
-    selectedCategory =
-        category;
-
-    document.getElementById("home")
-        .style.display = "none";
-
-    document.getElementById("levelPage")
-        .style.display = "block";
-
+    openModal(`
+        <h2>👤 Mon profil</h2>
+        <input id="nameInput" class="profileInput"
+               maxlength="16"
+               placeholder="Ton pseudo"
+               value="${escapeHTML(name)}">
+        <button class="blue" onclick="saveProfile()">💾 Enregistrer</button>
+        <br><br>
+        <button class="back" onclick="closeModal()">Fermer</button>
+    `);
 }
 
+function saveProfile(){
 
-function backHome() {
+    const input=document.getElementById("nameInput");
+    const name=input.value.trim();
 
-    hideAll();
+    if(!name){
+        alert("Choisis un pseudo !");
+        return;
+    }
 
-    document.getElementById("home")
-        .style.display = "block";
+    currentPlayer=name;
+    localStorage.setItem("currentPlayer",name);
 
+    if(!players[name]){
+        players[name]={
+            points:0,
+            coins:0,
+            bestScore:0,
+            wins:0,
+            bestStreak:0
+        };
+    }
+
+    savePlayers();
+    closeModal();
+    updateHome();
 }
 
+function getPlayer(){
+
+    if(!currentPlayer) return null;
+
+    if(!players[currentPlayer]){
+        players[currentPlayer]={
+            points:0,
+            coins:0,
+            bestScore:0,
+            wins:0,
+            bestStreak:0
+        };
+        savePlayers();
+    }
+
+    return players[currentPlayer];
+}
+
+function escapeHTML(text){
+    return text.replace(/[&<>"']/g,m=>({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+    }[m]));
+}
 
 /* =====================================================
-   CREER QUIZ
+   CLASSEMENT
 ===================================================== */
 
-function createQuiz() {
+function showRanking(){
 
-    const allQuestions =
-        quizzes[selectedCategory][selectedLevel];
+    const list=Object.entries(players)
+        .sort((a,b)=>b[1].points-a[1].points);
 
-    let number;
+    let html="<h2>🏆 CLASSEMENT</h2>";
 
-    if (selectedLevel === "facile")
-        number = 5;
-    else if (selectedLevel === "moyen")
-        number = 10;
-    else
-        number = 15;
+    if(list.length===0){
+        html+=`
+            <p>Personne ne s'est encore inscrit.</p>
+            <p>👤 Va dans Profil pour choisir ton pseudo.</p>
+        `;
+    }else{
 
-    const key =
-        selectedCategory +
-        "-" +
-        selectedLevel;
+        list.forEach((p,i)=>{
 
-    if (!usedQuestions[key]) {
-        usedQuestions[key] = [];
-    }
+            let medal=["🥇","🥈","🥉"][i]||"🏅";
 
-    let available =
-        allQuestions.filter(
-            q =>
-                !usedQuestions[key]
-                    .includes(q[0])
-        );
-
-    if (
-        available.length <
-        number
-    ) {
-
-        usedQuestions[key] = [];
-
-        available =
-            [...allQuestions];
-
-    }
-
-    const selected =
-        shuffle(available)
-            .slice(0, number);
-
-    selected.forEach(q => {
-
-        usedQuestions[key]
-            .push(q[0]);
-
-    });
-
-    currentQuiz =
-        selected.map(q => {
-
-            const answers =
-                shuffle(q[1]);
-
-            return {
-
-                question: q[0],
-
-                answers: answers,
-
-                correct:
-                    answers.indexOf(q[2])
-
-            };
-
+            html+=`
+                <div class="rank">
+                    <span>${medal} ${escapeHTML(p[0])}</span>
+                    <strong>${p[1].points} pts</strong>
+                </div>
+            `;
         });
-
-}
-
-
-/* =====================================================
-   DEMARRER
-===================================================== */
-
-function startQuiz(level) {
-
-    selectedLevel =
-        level;
-
-    currentQuestion = 0;
-    score = 0;
-    streak = 0;
-
-    createQuiz();
-
-    document.getElementById("levelPage")
-        .style.display = "none";
-
-    document.getElementById("quizBox")
-        .style.display = "block";
-
-    showQuestion();
-
-}
-
-
-/* =====================================================
-   AFFICHER QUESTION
-===================================================== */
-
-function showQuestion() {
-
-    clearInterval(timer);
-
-    const q =
-        currentQuiz[currentQuestion];
-
-    document.getElementById("progress")
-        .innerText =
-        "Question " +
-        (currentQuestion + 1) +
-        " / " +
-        currentQuiz.length;
-
-    document.getElementById("question")
-        .innerText =
-        q.question;
-
-    document.getElementById("currentStreak")
-        .innerText =
-        streak;
-
-    const answers =
-        document.getElementById("answers");
-
-    answers.innerHTML = "";
-
-    q.answers.forEach(
-        function(answer, index) {
-
-            const button =
-                document.createElement("button");
-
-            button.innerText =
-                answer;
-
-            button.className =
-                "answer";
-
-            button.onclick =
-                function() {
-
-                    selectAnswer(index);
-
-                };
-
-            answers.appendChild(button);
-
-        }
-    );
-
-    document.getElementById("nextBtn")
-        .style.display = "none";
-
-    startTimer();
-
-}
-
-
-/* =====================================================
-   CHRONO
-===================================================== */
-
-function startTimer() {
-
-    timeLeft = 15;
-
-    updateTimer();
-
-    timer =
-        setInterval(
-            function() {
-
-                timeLeft--;
-
-                updateTimer();
-
-                if (timeLeft <= 0) {
-
-                    clearInterval(timer);
-
-                    timeOut();
-
-                }
-
-            },
-            1000
-        );
-
-}
-
-
-function updateTimer() {
-
-    document.getElementById("timer")
-        .innerText =
-        "⏱️ " +
-        timeLeft +
-        " secondes";
-
-    document.getElementById("timerFill")
-        .style.width =
-        (timeLeft / 15 * 100) +
-        "%";
-
-}
-
-
-function timeOut() {
-
-    const q =
-        currentQuiz[currentQuestion];
-
-    const buttons =
-        document.querySelectorAll(".answer");
-
-    buttons.forEach(
-        function(button, index) {
-
-            button.disabled = true;
-
-            if (
-                index === q.correct
-            ) {
-
-                button.classList.add(
-                    "correct"
-                );
-
-            }
-
-        }
-    );
-
-    streak = 0;
-
-    sound(120, 0.2);
-
-    document.getElementById("currentStreak")
-        .innerText = streak;
-
-    document.getElementById("nextBtn")
-        .style.display =
-        "inline-block";
-
-}
-
-
-/* =====================================================
-   REPONSE
-===================================================== */
-
-function selectAnswer(selected) {
-
-    clearInterval(timer);
-
-    const q =
-        currentQuiz[currentQuestion];
-
-    const buttons =
-        document.querySelectorAll(".answer");
-
-    buttons.forEach(
-        function(button, index) {
-
-            button.disabled = true;
-
-            if (
-                index === q.correct
-            ) {
-
-                button.classList.add(
-                    "correct"
-                );
-
-            }
-
-            if (
-                index === selected &&
-                index !== q.correct
-            ) {
-
-                button.classList.add(
-                    "wrong"
-                );
-
-            }
-
-        }
-    );
-
-
-    if (
-        selected === q.correct
-    ) {
-
-        score++;
-
-        streak++;
-
-        sound(700, 0.15);
-
-        if (streak > bestStreak) {
-
-            bestStreak =
-                streak;
-
-        }
-
-    } else {
-
-        streak = 0;
-
-        sound(120, 0.2);
-
     }
 
-    document.getElementById("currentStreak")
-        .innerText =
-        streak;
+    html+=`<br><button class="back" onclick="closeModal()">Fermer</button>`;
 
-    document.getElementById("nextBtn")
-        .style.display =
-        "inline-block";
-
+    openModal(html);
 }
-
-
-/* =====================================================
-   QUESTION SUIVANTE
-===================================================== */
-
-function nextQuestion() {
-
-    currentQuestion++;
-
-    if (
-        currentQuestion <
-        currentQuiz.length
-    ) {
-
-        showQuestion();
-
-    } else {
-
-        showResult();
-
-    }
-
-}
-
-
-/* =====================================================
-   RESULTAT
-===================================================== */
-
-function showResult() {
-
-    clearInterval(timer);
-
-    document.getElementById("quizBox")
-        .style.display =
-        "none";
-
-    document.getElementById("result")
-        .style.display =
-        "block";
-
-    document.getElementById("finalScore")
-        .innerText =
-        score +
-        " / " +
-        currentQuiz.length;
-
-    let message = "";
-
-    if (
-        score ===
-        currentQuiz.length
-    ) {
-
-        message =
-            "🔥 INCROYABLE ! Score parfait !";
-
-    } else if (
-        score >=
-        currentQuiz.length * 0.8
-    ) {
-
-        message =
-            "🏆 Excellent !";
-
-    } else if (
-        score >=
-        currentQuiz.length * 0.5
-    ) {
-
-        message =
-            "👏 Très bon score !";
-
-    } else {
-
-        message =
-            "💪 Continue à t'entraîner !";
-
-    }
-
-
-    let reward = 0;
-
-    /*
-       QUIZ GAGNÉ :
-       score >= 50 %
-       = +50 points
-    */
-
-    if (
-        score >=
-        currentQuiz.length * 0.5
-    ) {
-
-        playerPoints += 50;
-
-        playerCoins += 250;
-
-        gamesWon++;
-
-        reward =
-            50;
-
-        document.getElementById("rewardText")
-            .innerHTML =
-            "🎉 Quiz gagné !<br>" +
-            "🏆 +50 points<br>" +
-            "🪙 +250 pièces";
-
-    } else {
-
-        document.getElementById("rewardText")
-            .innerHTML =
-            "❌ Pas de récompense cette fois.";
-
-    }
-
-
-    if (streak >= 3) {
-
-        playerPoints +=
-            streak * 5;
-
-        document.getElementById("rewardText")
-            .innerHTML +=
-            "<br>🔥 Bonus de série : +" +
-            (streak * 5) +
-            " points";
-
-    }
-
-
-    document.getElementById("scoreText")
-        .innerHTML =
-        message;
-
-    saveData();
-
-    updateRanking();
-
-    updateProfile();
-
-}
-
-
-/* =====================================================
-   REJOUER
-===================================================== */
-
-function restartQuiz() {
-
-    currentQuestion = 0;
-
-    score = 0;
-
-    streak = 0;
-
-    createQuiz();
-
-    document.getElementById("result")
-        .style.display =
-        "none";
-
-    document.getElementById("quizBox")
-        .style.display =
-        "block";
-
-    showQuestion();
-
-}
-
 
 /* =====================================================
    BOUTIQUE
 ===================================================== */
 
-function showShop() {
+function showShop(){
 
-    hideAll();
+    const p=getPlayer();
 
-    document.getElementById("shopPage")
-        .style.display =
-        "block";
-
-    updateProfile();
-
-}
-
-
-function buyTheme(theme, price) {
-
-    if (
-        unlockedThemes.includes(theme)
-    ) {
-
-        alert("Tu possèdes déjà ce thème !");
-
+    if(!p){
+        openModal(`
+            <h2>🪙 Boutique</h2>
+            <p>Crée ton profil pour utiliser la boutique.</p>
+            <button class="blue" onclick="closeModal();showProfile()">👤 Profil</button>
+        `);
         return;
-
     }
 
-    if (
-        playerCoins < price
-    ) {
+    openModal(`
+        <h2>🪙 Boutique</h2>
+        <p>Tu as <strong>${p.coins}</strong> pièces.</p>
 
+        <div class="shopItem">
+            <span>✨ Effet spécial</span>
+            <button class="blue" onclick="buyItem(100)">100 🪙</button>
+        </div>
+
+        <div class="shopItem">
+            <span>🔥 Animation bonus</span>
+            <button class="blue" onclick="buyItem(200)">200 🪙</button>
+        </div>
+
+        <div class="shopItem">
+            <span>💎 Effet premium</span>
+            <button class="blue" onclick="buyItem(500)">500 🪙</button>
+        </div>
+
+        <button class="back" onclick="closeModal()">Fermer</button>
+    `);
+}
+
+function buyItem(price){
+
+    const p=getPlayer();
+
+    if(!p) return;
+
+    if(p.coins<price){
         alert("Tu n'as pas assez de pièces !");
-
         return;
-
     }
 
-    playerCoins -= price;
+    p.coins-=price;
+    savePlayers();
 
-    unlockedThemes.push(theme);
-
-    saveData();
-
-    updateProfile();
-
-    alert(
-        "🎉 Thème acheté !"
-    );
-
+    alert("🎉 Objet acheté !");
+    showShop();
 }
-
 
 /* =====================================================
-   THEMES
+   THÈMES
 ===================================================== */
 
-function showThemes() {
+function showThemes(){
 
-    hideAll();
+    openModal(`
+        <h2>🎨 Thèmes</h2>
 
-    document.getElementById("themesPage")
-        .style.display =
-        "block";
+        <button class="themeBtn blue" onclick="setTheme('')">
+            🌑 Dark
+        </button>
 
+        <button class="themeBtn blue" onclick="setTheme('neon')">
+            🔵 Néon
+        </button>
+
+        <button class="themeBtn hard" onclick="setTheme('red')">
+            🔥 Rouge
+        </button>
+
+        <button class="themeBtn easy" onclick="setTheme('football')">
+            ⚽ Football
+        </button>
+
+        <button class="themeBtn blue" onclick="setTheme('space')">
+            🪐 Espace
+        </button>
+
+        <br><br>
+        <button class="back" onclick="closeModal()">Fermer</button>
+    `);
 }
 
+function setTheme(theme){
 
-function setTheme(theme) {
+    document.body.className=theme;
+    localStorage.setItem("theme",theme);
+    closeModal();
+}
 
-    if (
-        !unlockedThemes.includes(theme)
-    ) {
+document.body.className=localStorage.getItem("theme")||"";
 
-        alert(
-            "🔒 Ce thème est verrouillé. Achète-le dans la boutique !"
-        );
+/* =====================================================
+   MODAL
+===================================================== */
 
-        return;
+function openModal(html){
+    document.getElementById("modalContent").innerHTML=html;
+    document.getElementById("modal").classList.remove("hidden");
+}
 
+function closeModal(){
+    document.getElementById("modal").classList.add("hidden");
+}
+
+/* =====================================================
+   MUSIQUE
+===================================================== */
+
+function updateMusicButton(){
+
+    const btn=document.getElementById("musicButton");
+
+    if(musicOn){
+        btn.innerText="🔊 MUSIQUE ACTIVE";
+        btn.style.background="#219653";
+    }else{
+        btn.innerText="🔇 MUSIQUE DÉSACTIVÉE";
+        btn.style.background="#c53b4a";
+    }
+}
+
+function createAudio(){
+
+    if(audioContext) return;
+
+    audioContext=new(window.AudioContext||window.webkitAudioContext)();
+
+    masterGain=audioContext.createGain();
+    masterGain.gain.value=volume/100;
+    masterGain.connect(audioContext.destination);
+}
+
+function startMusic(){
+
+    createAudio();
+
+    if(audioContext.state==="suspended"){
+        audioContext.resume();
     }
 
-    document.body.classList.remove(
-        "neon",
-        "red",
-        "football"
-    );
+    musicOn=true;
+    localStorage.setItem("musicOn","true");
+    updateMusicButton();
 
-    if (
-        theme !== "default"
-    ) {
+    playMusicLoop();
+}
 
-        document.body.classList.add(
-            theme
+let musicTimeout;
+
+function playMusicLoop(){
+
+    if(!musicOn||!audioContext) return;
+
+    const notes=[261.63,329.63,392,523.25,392,329.63];
+    const now=audioContext.currentTime;
+
+    notes.forEach((freq,i)=>{
+
+        const osc=audioContext.createOscillator();
+        const gain=audioContext.createGain();
+
+        osc.type="triangle";
+        osc.frequency.value=freq;
+
+        gain.gain.setValueAtTime(0.001,now+i*.45);
+        gain.gain.exponentialRampToValueAtTime(
+            .08,
+            now+i*.45+.08
+        );
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            now+i*.45+.4
         );
 
+        osc.connect(gain);
+        gain.connect(masterGain);
+
+        osc.start(now+i*.45);
+        osc.stop(now+i*.45+.45);
+    });
+
+    musicTimeout=setTimeout(playMusicLoop,2700);
+}
+
+function stopMusic(){
+
+    musicOn=false;
+    localStorage.setItem("musicOn","false");
+
+    clearTimeout(musicTimeout);
+
+    if(audioContext){
+        audioContext.close();
+        audioContext=null;
+        masterGain=null;
     }
 
-    localStorage.setItem(
-        "quizzone_theme",
-        theme
-    );
-
+    updateMusicButton();
 }
 
+function toggleMusic(){
 
-/* Charger thème */
-
-const savedTheme =
-    localStorage.getItem(
-        "quizzone_theme"
-    );
-
-if (
-    savedTheme &&
-    savedTheme !== "default"
-) {
-
-    document.body.classList.add(
-        savedTheme
-    );
-
+    if(musicOn){
+        stopMusic();
+    }else{
+        startMusic();
+    }
 }
 
+function changeVolume(v){
+
+    volume=Number(v);
+    localStorage.setItem("volume",volume);
+
+    if(masterGain){
+        masterGain.gain.value=volume/100;
+    }
+}
+
+updateMusicButton();
+document.getElementById("volume").value=volume;
+
+/* =====================================================
+   PETITS SONS
+===================================================== */
+
+function sound(type){
+
+    if(!musicOn) return;
+
+    createAudio();
+
+    const osc=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+
+    if(type==="correct"){
+        osc.frequency.value=700;
+        gain.gain.value=.12;
+    }else if(type==="wrong"){
+        osc.frequency.value=160;
+        gain.gain.value=.12;
+    }else{
+        osc.frequency.value=500;
+        gain.gain.value=.08;
+    }
+
+    osc.start();
+
+    osc.frequency.exponentialRampToValueAtTime(
+        type==="correct"?1000:80,
+        audioContext.currentTime+.25
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioContext.currentTime+.25
+    );
+
+    osc.stop(audioContext.currentTime+.25);
+}
 
 /* =====================================================
    NAVIGATION
 ===================================================== */
 
-function hideAll() {
+function chooseCategory(c){
 
-    document.getElementById("home")
-        .style.display =
-        "none";
+    category=c;
 
-    document.getElementById("levelPage")
-        .style.display =
-        "none";
-
-    document.getElementById("quizBox")
-        .style.display =
-        "none";
-
-    document.getElementById("result")
-        .style.display =
-        "none";
-
-    document.getElementById("rankingPage")
-        .style.display =
-        "none";
-
-    document.getElementById("shopPage")
-        .style.display =
-        "none";
-
-    document.getElementById("themesPage")
-        .style.display =
-        "none";
-
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("levelPage").classList.remove("hidden");
 }
 
-
-function goHome() {
+function goHome(){
 
     clearInterval(timer);
 
-    hideAll();
+    document.getElementById("levelPage").classList.add("hidden");
+    document.getElementById("quizBox").classList.add("hidden");
+    document.getElementById("result").classList.add("hidden");
+    document.getElementById("home").classList.remove("hidden");
 
-    document.getElementById("home")
-        .style.display =
-        "block";
-
-    updateProfile();
-
+    updateHome();
 }
 
+function updateHome(){
+
+    const p=getPlayer();
+
+    document.getElementById("coinsHome").innerText=
+        p?p.coins:0;
+}
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+function shuffle(arr){
+
+    arr=[...arr];
+
+    for(let i=arr.length-1;i>0;i--){
+
+        const j=Math.floor(Math.random()*(i+1));
+
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+
+    return arr;
+}
+
+function startQuiz(l){
+
+    if(!currentPlayer){
+
+        openModal(`
+            <h2>👤 Profil nécessaire</h2>
+            <p>Choisis d'abord ton pseudo dans ton profil.</p>
+            <button class="blue" onclick="closeModal();showProfile()">
+                👤 Créer mon profil
+            </button>
+        `);
+
+        return;
+    }
+
+    level=l;
+    questionIndex=0;
+    score=0;
+    streak=0;
+
+    const all=quizzes[category][level];
+
+    let number=
+        level==="facile"?5:
+        level==="moyen"?10:15;
+
+    quiz=shuffle(all).slice(0,Math.min(number,all.length))
+        .map(q=>{
+
+            const answers=shuffle(q[1]);
+
+            return{
+                question:q[0],
+                answers:answers,
+                correct:answers.indexOf(q[2])
+            };
+        });
+
+    document.getElementById("levelPage").classList.add("hidden");
+    document.getElementById("quizBox").classList.remove("hidden");
+
+    showQuestion();
+}
+
+function showQuestion(){
+
+    clearInterval(timer);
+
+    const q=quiz[questionIndex];
+
+    document.getElementById("progress").innerText=
+        `Question ${questionIndex+1} / ${quiz.length}`;
+
+    document.getElementById("question").innerText=q.question;
+
+    document.getElementById("gameScore").innerText=score;
+    document.getElementById("streak").innerText=streak;
+
+    document.getElementById("feedback").innerText="";
+
+    const answers=document.getElementById("answers");
+    answers.innerHTML="";
+
+    q.answers.forEach((answer,i)=>{
+
+        const btn=document.createElement("button");
+
+        btn.className="answer fade";
+        btn.innerText=answer;
+
+        btn.onclick=()=>selectAnswer(i);
+
+        answers.appendChild(btn);
+    });
+
+    document.getElementById("nextBtn").classList.add("hidden");
+
+    startTimer();
+}
+
+/* =====================================================
+   CHRONO
+===================================================== */
+
+function startTimer(){
+
+    timeLeft=15;
+
+    updateTimer();
+
+    timer=setInterval(()=>{
+
+        timeLeft--;
+
+        updateTimer();
+
+        if(timeLeft<=0){
+
+            clearInterval(timer);
+            timeOut();
+        }
+
+    },1000);
+}
+
+function updateTimer(){
+
+    document.getElementById("time").innerText=timeLeft;
+
+    document.getElementById("timerProgress").style.width=
+        (timeLeft/15*100)+"%";
+}
+
+function timeOut(){
+
+    const buttons=document.querySelectorAll(".answer");
+
+    buttons.forEach(b=>b.disabled=true);
+
+    const q=quiz[questionIndex];
+
+    buttons[q.correct].classList.add("correct");
+
+    streak=0;
+
+    document.getElementById("feedback").innerText=
+        "⏰ Temps écoulé !";
+
+    sound("wrong");
+
+    document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+/* =====================================================
+   RÉPONSE
+===================================================== */
+
+function selectAnswer(index){
+
+    clearInterval(timer);
+
+    const q=quiz[questionIndex];
+    const buttons=document.querySelectorAll(".answer");
+
+    buttons.forEach((b,i)=>{
+
+        b.disabled=true;
+
+        if(i===q.correct)
+            b.classList.add("correct");
+
+        if(i===index && i!==q.correct)
+            b.classList.add("wrong");
+    });
+
+    if(index===q.correct){
+
+        score+=10;
+        streak++;
+
+        sound("correct");
+
+        document.getElementById("feedback").innerText=
+            `🎉 Bonne réponse ! 🔥 Série : ${streak}`;
+
+        if(streak>=3){
+
+            score+=5;
+
+            document.getElementById("feedback").innerText=
+                `🔥 SÉRIE DE ${streak} ! +5 BONUS`;
+        }
+
+        if(streak>=(getPlayer().bestStreak||0)){
+            getPlayer().bestStreak=streak;
+        }
+
+        celebrate();
+
+    }else{
+
+        streak=0;
+
+        sound("wrong");
+
+        document.getElementById("feedback").innerText=
+            "💥 Mauvaise réponse !";
+    }
+
+    document.getElementById("gameScore").innerText=score;
+
+    document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+/* =====================================================
+   QUESTION SUIVANTE
+===================================================== */
+
+function nextQuestion(){
+
+    questionIndex++;
+
+    if(questionIndex<quiz.length){
+
+        showQuestion();
+
+    }else{
+
+        showResult();
+    }
+}
+
+/* =====================================================
+   FIN DU QUIZ
+===================================================== */
+
+function showResult(){
+
+    clearInterval(timer);
+
+    const p=getPlayer();
+
+    const won=score>=quiz.length*10*.5;
+
+    let reward=0;
+
+    if(won){
+
+        p.points+=50;
+        p.coins+=250;
+        p.wins++;
+
+        reward=50;
+
+        celebrateBig();
+    }
+
+    if(score>p.bestScore){
+        p.bestScore=score;
+    }
+
+    savePlayers();
+
+    document.getElementById("quizBox").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("scoreText").innerHTML=`
+        ⭐ Score : <strong>${score}</strong><br><br>
+
+        ${won
+        ?"🏆 <strong>QUIZ GAGNÉ !</strong><br>💰 +250 pièces<br>⭐ +50 points au classement"
+        :"💪 Continue, tu peux faire mieux !"
+        }
+
+        <br><br>
+
+        🏆 Meilleur score : ${p.bestScore}<br>
+        🔥 Meilleure série : ${p.bestStreak}<br>
+        🏆 Quiz gagnés : ${p.wins}
+    `;
+
+    updateHome();
+}
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+function celebrate(){
+
+    const container=document.getElementById("confetti");
+
+    for(let i=0;i<12;i++){
+
+        const el=document.createElement("div");
+
+        el.innerText=["🎉","⭐","✨","🔥"][Math.floor(Math.random()*4)];
+
+        el.style.position="fixed";
+        el.style.left=Math.random()*100+"%";
+        el.style.top="50%";
+        el.style.fontSize="25px";
+        el.style.transition="1s";
+
+        container.appendChild(el);
+
+        setTimeout(()=>{
+            el.style.top=Math.random()*100+"%";
+            el.style.opacity="0";
+            el.style.transform="scale(2)";
+        },20);
+
+        setTimeout(()=>el.remove(),1100);
+    }
+}
+
+function celebrateBig(){
+
+    for(let i=0;i<35;i++){
+
+        const el=document.createElement("div");
+
+        el.innerText=["🎉","🏆","⭐","🔥","💰"][Math.floor(Math.random()*5)];
+
+        el.style.position="fixed";
+        el.style.left=Math.random()*100+"%";
+        el.style.top="-20px";
+        el.style.fontSize=(20+Math.random()*25)+"px";
+        el.style.transition=(1.5+Math.random())+"s";
+
+        document.getElementById("confetti").appendChild(el);
+
+        setTimeout(()=>{
+            el.style.top="110%";
+            el.style.transform="rotate(720deg)";
+        },20);
+
+        setTimeout(()=>el.remove(),3000);
+    }
+}
+
+function restartQuiz(){
+
+    document.getElementById("result").classList.add("hidden");
+    document.getElementById("quizBox").classList.remove("hidden");
+
+    questionIndex=0;
+    score=0;
+    streak=0;
+
+    quiz=shuffle(quizzes[category][level])
+        .slice(0,level==="facile"?5:level==="moyen"?10:15)
+        .map(q=>{
+
+            const a=shuffle(q[1]);
+
+            return{
+                question:q[0],
+                answers:a,
+                correct:a.indexOf(q[2])
+            };
+        });
+
+    showQuestion();
+}
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+updateHome();
+updateMusicButton();
 
 </script>
 
