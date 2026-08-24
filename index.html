@@ -62,8 +62,6 @@ button:disabled {
     cursor: default;
 }
 
-/* MUSIQUE */
-
 #musicButton {
     position: fixed;
     top: 15px;
@@ -73,8 +71,6 @@ button:disabled {
     font-size: 15px;
     z-index: 10;
 }
-
-/* CATEGORIES */
 
 .grid {
     display: grid;
@@ -89,8 +85,6 @@ button:disabled {
 .category:hover {
     background: #4c4c80;
 }
-
-/* NIVEAUX */
 
 .levels {
     display: flex;
@@ -128,15 +122,11 @@ button:disabled {
     margin-top: 25px;
 }
 
-/* PAGES */
-
 #levelPage,
 #quizBox,
 #result {
     display: none;
 }
-
-/* QUIZ */
 
 .quiz-card {
     background: #252542;
@@ -204,137 +194,226 @@ button:disabled {
 
 <body>
 
-<audio id="musique" loop>
-    <source src="musique.mp3" type="audio/mpeg">
-</audio>
-
 <button id="musicButton" onclick="toggleMusic()">
-    🎵 Musique
+🎵 Musique calme
 </button>
 
 <header>
-    <h1>🧠 QuizZone</h1>
-    <p>Teste tes connaissances !</p>
+<h1>🧠 QuizZone</h1>
+<p>Teste tes connaissances !</p>
 </header>
 
 <div class="container">
 
-    <div id="home">
+<div id="home">
 
-        <h2>Choisis une catégorie 👇</h2>
+<h2>Choisis une catégorie 👇</h2>
 
-        <div class="grid">
+<div class="grid">
 
-            <button class="category" onclick="chooseCategory('football')">
-                ⚽ Football
-            </button>
+<button class="category" onclick="chooseCategory('football')">
+⚽ Football
+</button>
 
-            <button class="category" onclick="chooseCategory('gaming')">
-                🎮 Jeux vidéo
-            </button>
+<button class="category" onclick="chooseCategory('gaming')">
+🎮 Jeux vidéo
+</button>
 
-            <button class="category" onclick="chooseCategory('culture')">
-                🌍 Culture générale
-            </button>
+<button class="category" onclick="chooseCategory('culture')">
+🌍 Culture générale
+</button>
 
-            <button class="category" onclick="chooseCategory('films')">
-                🎬 Films et séries
-            </button>
+<button class="category" onclick="chooseCategory('films')">
+🎬 Films et séries
+</button>
 
-        </div>
+</div>
+</div>
 
-    </div>
+<div id="levelPage">
 
-    <div id="levelPage">
+<h2>Choisis ton niveau 🔥</h2>
 
-        <h2>Choisis ton niveau 🔥</h2>
+<div class="levels">
 
-        <div class="levels">
+<button class="easy" onclick="startQuiz('facile')">
+🟢 Niveau 1 — Facile
+<span>5 questions</span>
+</button>
 
-            <button class="easy" onclick="startQuiz('facile')">
-                🟢 Niveau 1 — Facile
-                <span>5 questions</span>
-            </button>
+<button class="medium" onclick="startQuiz('moyen')">
+🟠 Niveau 2 — Moyen
+<span>10 questions</span>
+</button>
 
-            <button class="medium" onclick="startQuiz('moyen')">
-                🟠 Niveau 2 — Moyen
-                <span>10 questions</span>
-            </button>
+<button class="hard" onclick="startQuiz('difficile')">
+🔴 Niveau 3 — Difficile
+<span>15 questions</span>
+</button>
 
-            <button class="hard" onclick="startQuiz('difficile')">
-                🔴 Niveau 3 — Difficile
-                <span>15 questions</span>
-            </button>
+</div>
 
-        </div>
+<button class="back" onclick="backHome()">
+⬅ Retour
+</button>
 
-        <button class="back" onclick="backHome()">
-            ⬅ Retour
-        </button>
+</div>
 
-    </div>
+<div id="quizBox">
 
-    <div id="quizBox">
+<div class="quiz-card">
 
-        <div class="quiz-card">
+<div class="progress" id="progress"></div>
 
-            <div class="progress" id="progress"></div>
+<div class="question" id="question"></div>
 
-            <div class="question" id="question"></div>
+<div class="answers" id="answers"></div>
 
-            <div class="answers" id="answers"></div>
+<button class="next" id="nextBtn" onclick="nextQuestion()">
+Question suivante ➡️
+</button>
 
-            <button class="next" id="nextBtn" onclick="nextQuestion()">
-                Question suivante ➡️
-            </button>
+</div>
+</div>
 
-        </div>
+<div id="result" class="result">
 
-    </div>
+<h2>🏆 Quiz terminé !</h2>
 
-    <div id="result" class="result">
+<p id="scoreText"></p>
 
-        <h2>🏆 Quiz terminé !</h2>
+<button class="easy" onclick="restartQuiz()">
+🔄 Rejouer
+</button>
 
-        <p id="scoreText"></p>
+<button class="back" onclick="goHome()">
+🏠 Accueil
+</button>
 
-        <button class="easy" onclick="restartQuiz()">
-            🔄 Rejouer
-        </button>
-
-        <button class="back" onclick="goHome()">
-            🏠 Accueil
-        </button>
-
-    </div>
+</div>
 
 </div>
 
 <script>
 
-/* =========================
-   MUSIQUE
-========================= */
+/* ================= MUSIQUE CALME ================= */
 
-const musique = document.getElementById("musique");
+let audioContext;
+let musicPlaying = false;
+let musicInterval;
+let currentOscillators = [];
 
 function toggleMusic() {
 
     const bouton = document.getElementById("musicButton");
 
-    if (musique.paused) {
-        musique.play();
+    if (!musicPlaying) {
+
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        musicPlaying = true;
+
         bouton.innerText = "🔇 Couper la musique";
+
+        playCalmMusic();
+
     } else {
-        musique.pause();
-        bouton.innerText = "🎵 Musique";
+
+        musicPlaying = false;
+
+        clearInterval(musicInterval);
+
+        currentOscillators.forEach(osc => {
+            try {
+                osc.stop();
+            } catch(e) {}
+        });
+
+        currentOscillators = [];
+
+        if (audioContext) {
+            audioContext.close();
+        }
+
+        bouton.innerText = "🎵 Musique calme";
     }
 }
 
+function playNote(frequency, startTime, duration) {
 
-/* =========================
-   QUESTIONS
-========================= */
+    if (!musicPlaying) return;
+
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+
+    gainNode.gain.setValueAtTime(0.001, startTime);
+
+    gainNode.gain.exponentialRampToValueAtTime(
+        0.06,
+        startTime + 0.4
+    );
+
+    gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        startTime + duration
+    );
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration);
+
+    currentOscillators.push(oscillator);
+}
+
+function playCalmMusic() {
+
+    const notes = [
+        261.63,
+        329.63,
+        392.00,
+        329.63,
+        293.66,
+        349.23,
+        440.00,
+        349.23
+    ];
+
+    let index = 0;
+
+    function playSequence() {
+
+        if (!musicPlaying) return;
+
+        const now = audioContext.currentTime;
+
+        playNote(
+            notes[index],
+            now,
+            1.7
+        );
+
+        index++;
+
+        if (index >= notes.length) {
+            index = 0;
+        }
+    }
+
+    playSequence();
+
+    musicInterval = setInterval(
+        playSequence,
+        1800
+    );
+}
+
+
+/* ================= QUESTIONS ================= */
 
 const quizzes = {
 
@@ -344,15 +423,12 @@ facile: [
 
 ["Combien de joueurs y a-t-il dans une équipe sur le terrain ?", ["9", "10", "11", "12"], "11"],
 ["Quelle couleur de carton signifie une expulsion ?", ["Jaune", "Rouge", "Bleu", "Vert"], "Rouge"],
-["Qui protège le but ?", ["Le gardien", "L'arbitre", "Le supporter", "Le coach"], "Le gardien"],
-["Combien y a-t-il de mi-temps ?", ["1", "2", "3", "4"], "2"],
-["Quel joueur est surnommé CR7 ?", ["Lionel Messi", "Cristiano Ronaldo", "Neymar", "Mbappé"], "Cristiano Ronaldo"],
+["Qui est surnommé CR7 ?", ["Messi", "Cristiano Ronaldo", "Neymar", "Mbappé"], "Cristiano Ronaldo"],
+["Combien de mi-temps y a-t-il ?", ["1", "2", "3", "4"], "2"],
 ["Quel pays représente l'équipe des Bleus ?", ["France", "Italie", "Espagne", "Portugal"], "France"],
-["Combien de buts faut-il pour faire un triplé ?", ["2", "3", "4", "5"], "3"],
+["Combien de buts faut-il pour un triplé ?", ["2", "3", "4", "5"], "3"],
 ["Quel club est appelé PSG ?", ["Paris Saint-Germain", "Real Madrid", "Barcelone", "Juventus"], "Paris Saint-Germain"],
-["Quel joueur est français ?", ["Kylian Mbappé", "Neymar", "Erling Haaland", "Lionel Messi"], "Kylian Mbappé"],
-["Quel sport se joue principalement avec les pieds ?", ["Football", "Basketball", "Tennis", "Rugby"], "Football"]
-
+["Qui protège le but ?", ["Gardien", "Arbitre", "Coach", "Supporter"], "Gardien"]
 ],
 
 moyen: [
@@ -360,53 +436,45 @@ moyen: [
 ["Combien de minutes dure normalement un match ?", ["60", "80", "90", "120"], "90"],
 ["Dans quel pays joue la Juventus ?", ["France", "Italie", "Espagne", "Allemagne"], "Italie"],
 ["Quel club joue au Santiago Bernabéu ?", ["Real Madrid", "PSG", "Barcelone", "Milan"], "Real Madrid"],
-["Quelle compétition réunit les meilleurs clubs européens ?", ["Ligue des champions", "Coupe du Monde", "Euro", "Copa América"], "Ligue des champions"],
-["Quel joueur a joué au Barça puis au PSG ?", ["Lionel Messi", "Harry Kane", "Haaland", "Bellingham"], "Lionel Messi"],
-["Quel club anglais joue à Anfield ?", ["Liverpool", "Chelsea", "Arsenal", "Tottenham"], "Liverpool"],
-["Quel club joue au Camp Nou ?", ["FC Barcelone", "Real Madrid", "Atlético Madrid", "Séville"], "FC Barcelone"],
-["Combien de points rapporte généralement une victoire ?", ["1", "2", "3", "5"], "3"],
-["Quel pays a gagné la Coupe du Monde 2014 ?", ["Allemagne", "Brésil", "Argentine", "France"], "Allemagne"],
-["Quel pays a gagné la Coupe du Monde 2010 ?", ["Espagne", "Pays-Bas", "Allemagne", "Brésil"], "Espagne"],
-["Quel pays a gagné l'Euro 2016 ?", ["Portugal", "France", "Italie", "Espagne"], "Portugal"],
-["Qui a remporté le Ballon d'Or 2022 ?", ["Karim Benzema", "Sadio Mané", "Lionel Messi", "Robert Lewandowski"], "Karim Benzema"],
-["Quel club est surnommé les Citizens ?", ["Manchester City", "Manchester United", "Liverpool", "Chelsea"], "Manchester City"],
+["Quelle compétition réunit les meilleurs clubs européens ?", ["Ligue des champions", "Euro", "Coupe du Monde", "Copa América"], "Ligue des champions"],
+["Quel joueur a joué au Barça puis au PSG ?", ["Lionel Messi", "Haaland", "Kane", "Bellingham"], "Lionel Messi"],
+["Quel club joue à Anfield ?", ["Liverpool", "Chelsea", "Arsenal", "Tottenham"], "Liverpool"],
+["Combien de points rapporte une victoire ?", ["1", "2", "3", "5"], "3"],
+["Quel pays a gagné la Coupe du Monde 2014 ?", ["Allemagne", "Brésil", "France", "Argentine"], "Allemagne"],
+["Quel pays a gagné la Coupe du Monde 2010 ?", ["Espagne", "Pays-Bas", "Brésil", "Allemagne"], "Espagne"],
+["Qui a remporté le Ballon d'Or 2022 ?", ["Karim Benzema", "Messi", "Mané", "Lewandowski"], "Karim Benzema"],
 ["Dans quel championnat joue le Bayern Munich ?", ["Bundesliga", "Premier League", "Liga", "Serie A"], "Bundesliga"],
-["Quel joueur est connu pour porter le numéro 10 au PSG lors de son arrivée en 2021 ?", ["Lionel Messi", "Mbappé", "Neymar", "Ramos"], "Lionel Messi"]
-
+["Quel club est surnommé les Citizens ?", ["Manchester City", "Liverpool", "Chelsea", "Manchester United"], "Manchester City"]
 ],
 
 difficile: [
 
 ["Qui a remporté le Ballon d'Or en 2013 ?", ["Cristiano Ronaldo", "Lionel Messi", "Franck Ribéry", "Andrés Iniesta"], "Cristiano Ronaldo"],
-["Qui a remporté le Ballon d'Or en 2008 ?", ["Cristiano Ronaldo", "Lionel Messi", "Kaká", "Fernando Torres"], "Cristiano Ronaldo"],
-["Qui a remporté le Ballon d'Or en 2007 ?", ["Kaká", "Cristiano Ronaldo", "Ronaldinho", "Lionel Messi"], "Kaká"],
-["Quel joueur a remporté le Ballon d'Or en 1995 ?", ["George Weah", "Ronaldo", "Roberto Baggio", "Zidane"], "George Weah"],
-["Qui est le seul gardien à avoir remporté le Ballon d'Or ?", ["Lev Yachine", "Buffon", "Casillas", "Neuer"], "Lev Yachine"],
-["Quel joueur a remporté le Ballon d'Or en 1986 ?", ["Igor Belanov", "Maradona", "Gary Lineker", "Ruud Gullit"], "Igor Belanov"],
-["Qui a remporté le Ballon d'Or en 1998 ?", ["Zinedine Zidane", "Ronaldo", "Rivaldo", "Figo"], "Zinedine Zidane"],
-["Quel joueur a remporté le Ballon d'Or en 2002 ?", ["Ronaldo", "Roberto Carlos", "Oliver Kahn", "Zidane"], "Ronaldo"],
-["Qui a remporté le Ballon d'Or en 2006 ?", ["Fabio Cannavaro", "Zidane", "Ronaldinho", "Henry"], "Fabio Cannavaro"],
-["Quel joueur a remporté le Ballon d'Or en 1999 ?", ["Rivaldo", "David Beckham", "Zidane", "Raúl"], "Rivaldo"],
-["Qui a marqué le but surnommé « la Main de Dieu » ?", ["Diego Maradona", "Pelé", "Zidane", "Cruyff"], "Diego Maradona"],
+["Quel joueur a marqué 13 buts lors de la Coupe du Monde 1958 ?", ["Just Fontaine", "Pelé", "Ronaldo", "Klose"], "Just Fontaine"],
+["Quel club a remporté la première Coupe d'Europe des clubs champions ?", ["Real Madrid", "Benfica", "Milan", "Barcelone"], "Real Madrid"],
+["Qui a marqué le but surnommé la Main de Dieu ?", ["Diego Maradona", "Pelé", "Zidane", "Cruyff"], "Diego Maradona"],
+["Quel gardien est le seul à avoir remporté le Ballon d'Or ?", ["Lev Yachine", "Buffon", "Casillas", "Neuer"], "Lev Yachine"],
+["Quel pays a remporté la première Coupe du Monde en 1930 ?", ["Uruguay", "Brésil", "Argentine", "Italie"], "Uruguay"],
 ["Quel joueur est surnommé Il Fenomeno ?", ["Ronaldo", "Ronaldinho", "Romário", "Kaká"], "Ronaldo"],
-["Quel joueur a marqué le plus de buts lors d'une Coupe du Monde en une seule édition ?", ["Just Fontaine", "Pelé", "Ronaldo", "Miroslav Klose"], "Just Fontaine"],
-["Combien de buts Just Fontaine a-t-il marqués à la Coupe du Monde 1958 ?", ["13", "10", "11", "15"], "13"],
-["Quel club a remporté la première Coupe d'Europe des clubs champions ?", ["Real Madrid", "Benfica", "AC Milan", "FC Barcelone"], "Real Madrid"],
-["Quel joueur a remporté le Ballon d'Or en 1968 ?", ["George Best", "Pelé", "Eusébio", "Bobby Charlton"], "George Best"],
-["Qui a remporté le Ballon d'Or en 1971 ?", ["Johan Cruyff", "Franz Beckenbauer", "Pelé", "Gerd Müller"], "Johan Cruyff"],
-["Quel joueur a remporté le Ballon d'Or en 1975 ?", ["Oleg Blokhine", "Cruyff", "Beckenbauer", "Platini"], "Oleg Blokhine"],
-["Quel joueur a remporté le Ballon d'Or en 1987 ?", ["Ruud Gullit", "Van Basten", "Rijkaard", "Platini"], "Ruud Gullit"],
-["Qui a remporté le Ballon d'Or en 1989 ?", ["Marco van Basten", "Ruud Gullit", "Baresi", "Matthäus"], "Marco van Basten"],
-["Quel joueur a remporté le Ballon d'Or en 1990 ?", ["Lothar Matthäus", "Van Basten", "Brehme", "Gullit"], "Lothar Matthäus"],
-["Qui a remporté le Ballon d'Or en 1994 ?", ["Hristo Stoitchkov", "Roberto Baggio", "Romário", "Maldini"], "Hristo Stoitchkov"],
-["Quel joueur a remporté le Ballon d'Or en 1996 ?", ["Matthias Sammer", "Ronaldo", "Zidane", "Shearer"], "Matthias Sammer"],
-["Qui a remporté le Ballon d'Or en 2001 ?", ["Michael Owen", "Raúl", "Kahn", "Beckham"], "Michael Owen"],
-["Quel joueur a remporté le Ballon d'Or en 2003 ?", ["Pavel Nedvěd", "Henry", "Shevchenko", "Maldini"], "Pavel Nedvěd"]
+["Quel pays a remporté la Coupe du Monde 1966 ?", ["Angleterre", "Allemagne", "Brésil", "Italie"], "Angleterre"],
+["Quel joueur a remporté le Ballon d'Or en 2007 ?", ["Kaká", "Ronaldo", "Messi", "Ronaldinho"], "Kaká"],
+["Quel club a remporté le plus de Ligues des champions ?", ["Real Madrid", "Milan", "Liverpool", "Barcelone"], "Real Madrid"],
+["Quel joueur a remporté le Ballon d'Or en 1995 ?", ["George Weah", "Ronaldo", "Zidane", "Baggio"], "George Weah"],
+["Quel pays a remporté l'Euro 2004 ?", ["Grèce", "Portugal", "France", "Italie"], "Grèce"],
+["Qui a remporté la Coupe du Monde 1998 ?", ["France", "Brésil", "Italie", "Allemagne"], "France"],
+["Quel joueur a marqué le plus de buts en une seule Coupe du Monde ?", ["Just Fontaine", "Pelé", "Klose", "Ronaldo"], "Just Fontaine"],
+["Quel club est surnommé les Red Devils ?", ["Manchester United", "Liverpool", "Arsenal", "Chelsea"], "Manchester United"],
+["Quel joueur a remporté le Ballon d'Or 2002 ?", ["Ronaldo", "Zidane", "Kahn", "Roberto Carlos"], "Ronaldo"],
+["Quel pays a remporté la Coupe du Monde 1974 ?", ["Allemagne de l'Ouest", "Pays-Bas", "Brésil", "Italie"], "Allemagne de l'Ouest"],
+["Quel joueur est surnommé La Pulga ?", ["Lionel Messi", "Maradona", "Neymar", "Aguero"],
+"Lionel Messi"],
+
+["Quel club joue au Signal Iduna Park ?", ["Borussia Dortmund", "Bayern Munich", "Leverkusen", "Schalke"], "Borussia Dortmund"],
+["Quel pays a remporté l'Euro 1992 ?", ["Danemark", "Allemagne", "France", "Pays-Bas"], "Danemark"]
 
 ]
 
 },
-
 
 gaming: {
 
@@ -418,9 +486,7 @@ facile: [
 ["Quel jeu contient des imposteurs ?", ["Among Us", "Minecraft", "Roblox", "Mario Kart"], "Among Us"],
 ["Quel jeu contient des Brawlers ?", ["Brawl Stars", "Fortnite", "Minecraft", "Roblox"], "Brawl Stars"],
 ["Quel personnage porte une casquette rouge ?", ["Mario", "Sonic", "Steve", "Pac-Man"], "Mario"],
-["Quel personnage bleu court très vite ?", ["Sonic", "Mario", "Pac-Man", "Luigi"], "Sonic"],
-["Quel jeu possède le Battle Bus ?", ["Fortnite", "Minecraft", "Roblox", "Among Us"], "Fortnite"]
-
+["Quel personnage bleu court très vite ?", ["Sonic", "Mario", "Pac-Man", "Luigi"], "Sonic"]
 ],
 
 moyen: [
@@ -434,10 +500,8 @@ moyen: [
 ["Quel matériau sert à créer un portail du Nether ?", ["Obsidienne", "Diamant", "Fer", "Or"], "Obsidienne"],
 ["Comment appelle-t-on les personnages de Brawl Stars ?", ["Brawlers", "Champions", "Soldats", "Avatars"], "Brawlers"],
 ["Quel personnage est le frère de Mario ?", ["Luigi", "Sonic", "Link", "Steve"], "Luigi"],
-["Quel minerai permet de fabriquer une armure en diamant ?", ["Diamant", "Charbon", "Redstone", "Émeraude"], "Diamant"],
 ["Quel jeu contient Pikachu ?", ["Pokémon", "Minecraft", "Fortnite", "Roblox"], "Pokémon"],
 ["Dans quel jeu trouve-t-on Mortis ?", ["Brawl Stars", "Fortnite", "Roblox", "Among Us"], "Brawl Stars"]
-
 ],
 
 difficile: [
@@ -446,25 +510,21 @@ difficile: [
 ["Quelle entreprise a créé Fortnite ?", ["Epic Games", "Valve", "Nintendo", "Mojang"], "Epic Games"],
 ["Quel langage est utilisé dans Roblox Studio ?", ["Luau", "Python", "Java", "PHP"], "Luau"],
 ["Quel boss Minecraft invoque des crânes explosifs ?", ["Wither", "Ender Dragon", "Warden", "Iron Golem"], "Wither"],
-["Quelle entreprise a créé Half-Life ?", ["Valve", "Epic Games", "Ubisoft", "Nintendo"], "Valve"],
 ["Comment s'appelait Minecraft au tout début ?", ["Cave Game", "Block World", "Mine World", "Craft Land"], "Cave Game"],
 ["Quel moteur est utilisé par Fortnite ?", ["Unreal Engine", "Unity", "Source", "CryEngine"], "Unreal Engine"],
-["Quel studio a créé Clash Royale ?", ["Supercell", "Riot Games", "Valve", "Mojang"], "Supercell"],
 ["Dans quel jeu se trouve Black Mesa ?", ["Half-Life", "Portal", "Fortnite", "Minecraft"], "Half-Life"],
-["Quel matériau est nécessaire pour une table d'enchantement ?", ["Obsidienne", "Émeraude", "Quartz", "Netherite"], "Obsidienne"],
 ["Quel jeu est développé par Riot Games ?", ["League of Legends", "Minecraft", "GTA", "Fortnite"], "League of Legends"],
-["Quel moteur de jeu a été créé par Epic Games ?", ["Unreal Engine", "Unity", "Source", "Frostbite"], "Unreal Engine"],
 ["Quel studio a créé The Legend of Zelda ?", ["Nintendo", "Sega", "Valve", "Mojang"], "Nintendo"],
-["Quel boss de Minecraft apparaît naturellement dans les anciennes cités ?", ["Warden", "Wither", "Ender Dragon", "Elder Guardian"], "Warden"],
+["Quel boss apparaît dans les anciennes cités de Minecraft ?", ["Warden", "Wither", "Ender Dragon", "Elder Guardian"], "Warden"],
 ["Quel studio a créé Portal ?", ["Valve", "Epic Games", "Rockstar", "Ubisoft"], "Valve"],
-["Quel jeu a popularisé le mode Battle Royale parmi les propositions suivantes ?", ["Fortnite", "Minecraft", "GTA V", "The Sims"], "Fortnite"],
-["Quel est le langage de script principal de Roblox Studio ?", ["Luau", "C#", "C++", "Java"], "Luau"],
-["Quel studio a créé Brawl Stars ?", ["Supercell", "Riot Games", "Epic Games", "Valve"], "Supercell"]
-
+["Quel studio a créé Brawl Stars ?", ["Supercell", "Riot Games", "Epic Games", "Valve"], "Supercell"],
+["Quel langage utilise principalement Roblox Studio ?", ["Luau", "C#", "C++", "Java"], "Luau"],
+["Quel studio a créé GTA ?", ["Rockstar Games", "Valve", "Epic Games", "Ubisoft"], "Rockstar Games"],
+["Quel jeu contient le personnage Gordon Freeman ?", ["Half-Life", "Portal", "Minecraft", "Fortnite"], "Half-Life"],
+["Quel studio a créé Assassin's Creed ?", ["Ubisoft", "Rockstar", "Valve", "Nintendo"], "Ubisoft"]
 ]
 
 },
-
 
 culture: {
 
@@ -476,9 +536,7 @@ facile: [
 ["Quel est le satellite naturel de la Terre ?", ["La Lune", "Le Soleil", "Mars", "Vénus"], "La Lune"],
 ["Dans quel pays se trouve la Tour Eiffel ?", ["France", "Italie", "Espagne", "Belgique"], "France"],
 ["Quelle est la capitale de l'Italie ?", ["Rome", "Milan", "Venise", "Naples"], "Rome"],
-["Quel animal est le roi de la jungle ?", ["Lion", "Tigre", "Éléphant", "Loup"], "Lion"],
-["Quelle couleur obtient-on avec bleu et jaune ?", ["Vert", "Rouge", "Orange", "Violet"], "Vert"]
-
+["Quel animal est le roi de la jungle ?", ["Lion", "Tigre", "Éléphant", "Loup"], "Lion"]
 ],
 
 moyen: [
@@ -492,10 +550,8 @@ moyen: [
 ["Quelle langue est parlée au Brésil ?", ["Portugais", "Espagnol", "Français", "Italien"], "Portugais"],
 ["Dans quel pays se trouve le Taj Mahal ?", ["Inde", "Chine", "Japon", "Pakistan"], "Inde"],
 ["Quelle est la capitale du Japon ?", ["Tokyo", "Kyoto", "Osaka", "Nagoya"], "Tokyo"],
-["Quel pays est célèbre pour ses fjords ?", ["Norvège", "France", "Maroc", "Portugal"], "Norvège"],
-["Dans quel pays se trouve la Grande Muraille ?", ["Chine", "Japon", "Corée", "Inde"], "Chine"],
-["Quel océan est le plus grand ?", ["Pacifique", "Atlantique", "Indien", "Arctique"], "Pacifique"]
-
+["Quel océan est le plus grand ?", ["Pacifique", "Atlantique", "Indien", "Arctique"], "Pacifique"],
+["Dans quel pays se trouve la Grande Muraille ?", ["Chine", "Japon", "Corée", "Inde"], "Chine"]
 ],
 
 difficile: [
@@ -505,24 +561,20 @@ difficile: [
 ["Quel détroit sépare l'Espagne et le Maroc ?", ["Gibraltar", "Bosphore", "Béring", "Dardanelles"], "Gibraltar"],
 ["Quelle est la capitale de la Nouvelle-Zélande ?", ["Wellington", "Auckland", "Christchurch", "Hamilton"], "Wellington"],
 ["Dans quel pays se trouve Angkor Wat ?", ["Cambodge", "Thaïlande", "Vietnam", "Indonésie"], "Cambodge"],
-["Quelle est la capitale du Kazakhstan ?", ["Astana", "Almaty", "Tachkent", "Bichkek"], "Astana"],
 ["Quelle est la capitale de la Suisse ?", ["Berne", "Zurich", "Genève", "Lausanne"], "Berne"],
 ["Quelle est la capitale de la Turquie ?", ["Ankara", "Istanbul", "Izmir", "Antalya"], "Ankara"],
-["Quelle est la capitale du Maroc ?", ["Rabat", "Casablanca", "Marrakech", "Fès"], "Rabat"],
 ["Quelle monnaie est utilisée au Japon ?", ["Yen", "Yuan", "Won", "Dollar"], "Yen"],
 ["Quel fleuve est le plus long d'Europe ?", ["Volga", "Danube", "Rhin", "Loire"], "Volga"],
 ["Dans quel pays se trouve le désert d'Atacama ?", ["Chili", "Argentine", "Pérou", "Brésil"], "Chili"],
-["Quelle est la capitale du Myanmar ?", ["Naypyidaw", "Yangon", "Bangkok", "Hanoï"], "Naypyidaw"],
-["Quel pays possède Dubrovnik ?", ["Croatie", "Grèce", "Italie", "Espagne"], "Croatie"],
-["Quel pays est traversé par le canal de Panama ?", ["Panama", "Colombie", "Mexique", "Pérou"], "Panama"],
 ["Quelle est la capitale de la Mongolie ?", ["Oulan-Bator", "Astana", "Bichkek", "Tachkent"], "Oulan-Bator"],
+["Quel pays est traversé par le canal de Panama ?", ["Panama", "Colombie", "Mexique", "Pérou"], "Panama"],
 ["Quelle est la capitale du Bhoutan ?", ["Thimphou", "Katmandou", "Dacca", "New Delhi"], "Thimphou"],
-["Quelle mer est située entre l'Europe et l'Afrique ?", ["Méditerranée", "Baltique", "Noire", "Caspienne"], "Méditerranée"]
-
+["Quelle mer est située entre l'Europe et l'Afrique ?", ["Méditerranée", "Baltique", "Noire", "Caspienne"], "Méditerranée"],
+["Quelle est la capitale du Maroc ?", ["Rabat", "Casablanca", "Marrakech", "Fès"], "Rabat"],
+["Quelle est la capitale de la Finlande ?", ["Helsinki", "Oslo", "Stockholm", "Copenhague"], "Helsinki"]
 ]
 
 },
-
 
 films: {
 
@@ -534,9 +586,7 @@ facile: [
 ["Comment s'appelle le père de Simba ?", ["Mufasa", "Scar", "Timon", "Pumbaa"], "Mufasa"],
 ["Quel personnage est un ogre vert ?", ["Shrek", "Hulk", "Yoda", "Mike"], "Shrek"],
 ["Dans quel film trouve-t-on Elsa ?", ["La Reine des Neiges", "Cars", "Coco", "Shrek"], "La Reine des Neiges"],
-["Quel héros possède un marteau ?", ["Thor", "Batman", "Hulk", "Flash"], "Thor"],
-["Comment s'appelle le cowboy de Toy Story ?", ["Woody", "Buzz", "Olaf", "Simba"], "Woody"]
-
+["Quel héros possède un marteau ?", ["Thor", "Batman", "Hulk", "Flash"], "Thor"]
 ],
 
 moyen: [
@@ -551,9 +601,7 @@ moyen: [
 ["Comment s'appelle la planète dans Avatar ?", ["Pandora", "Tatooine", "Mars", "Arrakis"], "Pandora"],
 ["Quel héros utilise un arc dans Avengers ?", ["Hawkeye", "Thor", "Hulk", "Vision"], "Hawkeye"],
 ["Comment s'appelle l'ami roux de Harry Potter ?", ["Ron Weasley", "Drago", "Neville", "Sirius"], "Ron Weasley"],
-["Quel personnage bleu vient de Lilo et Stitch ?", ["Stitch", "Olaf", "Simba", "Woody"], "Stitch"],
-["Qui est le seigneur des ténèbres dans Le Seigneur des Anneaux ?", ["Sauron", "Saroumane", "Gandalf", "Frodon"], "Sauron"]
-
+["Quel personnage bleu vient de Lilo et Stitch ?", ["Stitch", "Olaf", "Simba", "Woody"], "Stitch"]
 ],
 
 difficile: [
@@ -571,12 +619,10 @@ difficile: [
 ["Qui a réalisé Avatar ?", ["James Cameron", "Christopher Nolan", "Spielberg", "Tarantino"], "James Cameron"],
 ["Dans quel film trouve-t-on Travis Bickle ?", ["Taxi Driver", "Joker", "Fight Club", "Seven"], "Taxi Driver"],
 ["Qui a réalisé Interstellar ?", ["Christopher Nolan", "James Cameron", "Ridley Scott", "Spielberg"], "Christopher Nolan"],
-["Quel personnage dit « Why so serious? » dans The Dark Knight ?", ["Le Joker", "Batman", "Bane", "Double-Face"], "Le Joker"],
+["Quel personnage dit « Why so serious? » ?", ["Le Joker", "Batman", "Bane", "Double-Face"], "Le Joker"],
 ["Quel réalisateur a réalisé Le Seigneur des Anneaux ?", ["Peter Jackson", "James Cameron", "Christopher Nolan", "Ridley Scott"], "Peter Jackson"],
-["Dans quel film apparaît le personnage Anton Chigurh ?", ["No Country for Old Men", "Seven", "Fight Club", "Heat"], "No Country for Old Men"],
-["Qui a réalisé Parasite ?", ["Bong Joon-ho", "Park Chan-wook", "Hayao Miyazaki", "Ang Lee"], "Bong Joon-ho"],
-["Quel film a pour personnage principal Forrest Gump ?", ["Forrest Gump", "Cast Away", "Big", "Apollo 13"], "Forrest Gump"]
-
+["Dans quel film apparaît Anton Chigurh ?", ["No Country for Old Men", "Seven", "Fight Club", "Heat"], "No Country for Old Men"],
+["Qui a réalisé Parasite ?", ["Bong Joon-ho", "Park Chan-wook", "Hayao Miyazaki", "Ang Lee"], "Bong Joon-ho"]
 ]
 
 }
@@ -584,27 +630,17 @@ difficile: [
 };
 
 
-/* =========================
-   VARIABLES
-========================= */
+/* ================= VARIABLES ================= */
 
 let selectedCategory = "";
 let selectedLevel = "";
 let currentQuiz = [];
 let currentQuestion = 0;
 let score = 0;
-
-/*
-Chaque catégorie et niveau garde
-en mémoire les questions déjà utilisées.
-*/
-
 let usedQuestions = {};
 
 
-/* =========================
-   MELANGER
-========================= */
+/* ================= MELANGER ================= */
 
 function shuffle(array) {
 
@@ -616,16 +652,13 @@ function shuffle(array) {
 
         [newArray[i], newArray[j]] =
         [newArray[j], newArray[i]];
-
     }
 
     return newArray;
 }
 
 
-/* =========================
-   CHOISIR CATEGORIE
-========================= */
+/* ================= CATEGORIE ================= */
 
 function chooseCategory(category) {
 
@@ -635,11 +668,6 @@ function chooseCategory(category) {
     document.getElementById("levelPage").style.display = "block";
 }
 
-
-/* =========================
-   RETOUR
-========================= */
-
 function backHome() {
 
     document.getElementById("levelPage").style.display = "none";
@@ -647,9 +675,7 @@ function backHome() {
 }
 
 
-/* =========================
-   CREER QUIZ SANS DOUBLONS
-========================= */
+/* ================= CREATION DU QUIZ ================= */
 
 function createQuiz() {
 
@@ -660,13 +686,9 @@ function createQuiz() {
 
     if (selectedLevel === "facile") {
         numberOfQuestions = 5;
-    }
-
-    if (selectedLevel === "moyen") {
+    } else if (selectedLevel === "moyen") {
         numberOfQuestions = 10;
-    }
-
-    if (selectedLevel === "difficile") {
+    } else {
         numberOfQuestions = 15;
     }
 
@@ -677,20 +699,10 @@ function createQuiz() {
         usedQuestions[quizKey] = [];
     }
 
-    /*
-    On prend uniquement les questions
-    qui n'ont pas encore été utilisées.
-    */
-
     let availableQuestions =
         allQuestions.filter(question =>
             !usedQuestions[quizKey].includes(question[0])
         );
-
-    /*
-    S'il n'y a plus assez de nouvelles
-    questions, on remet la liste à zéro.
-    */
 
     if (availableQuestions.length < numberOfQuestions) {
 
@@ -699,26 +711,13 @@ function createQuiz() {
         availableQuestions = [...allQuestions];
     }
 
-    /*
-    On mélange puis on prend le nombre
-    exact de questions.
-    */
-
     const selectedQuestions =
         shuffle(availableQuestions)
         .slice(0, numberOfQuestions);
 
-    /*
-    On enregistre les questions utilisées.
-    */
-
     selectedQuestions.forEach(question => {
         usedQuestions[quizKey].push(question[0]);
     });
-
-    /*
-    On mélange aussi les réponses.
-    */
 
     currentQuiz =
         selectedQuestions.map(question => {
@@ -736,9 +735,7 @@ function createQuiz() {
 }
 
 
-/* =========================
-   COMMENCER
-========================= */
+/* ================= DEMARRER ================= */
 
 function startQuiz(level) {
 
@@ -755,9 +752,7 @@ function startQuiz(level) {
 }
 
 
-/* =========================
-   AFFICHER QUESTION
-========================= */
+/* ================= AFFICHER QUESTION ================= */
 
 function showQuestion() {
 
@@ -786,19 +781,19 @@ function showQuestion() {
 
         button.classList.add("answer");
 
-        button.onclick = () => selectAnswer(index);
+        button.onclick =
+            () => selectAnswer(index);
 
         answers.appendChild(button);
 
     });
 
-    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("nextBtn").style.display =
+        "none";
 }
 
 
-/* =========================
-   REPONSE
-========================= */
+/* ================= REPONSE ================= */
 
 function selectAnswer(selected) {
 
@@ -834,9 +829,7 @@ function selectAnswer(selected) {
 }
 
 
-/* =========================
-   QUESTION SUIVANTE
-========================= */
+/* ================= QUESTION SUIVANTE ================= */
 
 function nextQuestion() {
 
@@ -854,14 +847,15 @@ function nextQuestion() {
 }
 
 
-/* =========================
-   RESULTAT
-========================= */
+/* ================= RESULTAT ================= */
 
 function showResult() {
 
-    document.getElementById("quizBox").style.display = "none";
-    document.getElementById("result").style.display = "block";
+    document.getElementById("quizBox").style.display =
+        "none";
+
+    document.getElementById("result").style.display =
+        "block";
 
     const total =
         currentQuiz.length;
@@ -883,7 +877,6 @@ function showResult() {
     } else {
 
         message = "💪 Continue à t'entraîner !";
-
     }
 
     document.getElementById("scoreText").innerHTML =
@@ -896,9 +889,7 @@ function showResult() {
 }
 
 
-/* =========================
-   REJOUER
-========================= */
+/* ================= REJOUER ================= */
 
 function restartQuiz() {
 
@@ -907,24 +898,31 @@ function restartQuiz() {
 
     createQuiz();
 
-    document.getElementById("result").style.display = "none";
-    document.getElementById("quizBox").style.display = "block";
+    document.getElementById("result").style.display =
+        "none";
+
+    document.getElementById("quizBox").style.display =
+        "block";
 
     showQuestion();
 }
 
 
-/* =========================
-   ACCUEIL
-========================= */
+/* ================= ACCUEIL ================= */
 
 function goHome() {
 
-    document.getElementById("result").style.display = "none";
-    document.getElementById("quizBox").style.display = "none";
-    document.getElementById("levelPage").style.display = "none";
+    document.getElementById("result").style.display =
+        "none";
 
-    document.getElementById("home").style.display = "block";
+    document.getElementById("quizBox").style.display =
+        "none";
+
+    document.getElementById("levelPage").style.display =
+        "none";
+
+    document.getElementById("home").style.display =
+        "block";
 }
 
 </script>
